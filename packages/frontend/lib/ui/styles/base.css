@@ -1,0 +1,30 @@
+@import 'sanitize.css' layer(reset);
+@import 'sanitize.css/forms.css' layer(reset);
+@import 'sanitize.css/typography.css' layer(reset);
+
+@layer reset {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin: 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}

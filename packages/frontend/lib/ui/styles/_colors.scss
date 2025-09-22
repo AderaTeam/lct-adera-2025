@@ -1,0 +1,215 @@
+// Basic colors
+
+$black-100: #202435;
+$black-90: #262d40;
+$black-80: #2e364d;
+$black-70: #3f4861;
+$black-60: #4b5570;
+$black-50: #65708c;
+$black-40: #737d99;
+$black-30: #8994b0;
+$black-20: #a3adc7;
+$black-10: #b6bdcf;
+$black-5: #cacfdb;
+$black-4: #dadee8;
+$black-3: #e4e6ed;
+$black-2: #ebedf2;
+$black-1: #f5f6fa;
+
+$brand-100: #f35521;
+$brand-90: #f46738;
+$brand-80: #f5764c;
+$brand-70: #f68560;
+$brand-60: #f7906e;
+$brand-50: #f89f81;
+$brand-40: #f9ae95;
+$brand-30: #fabda8;
+$brand-20: #fbcbbb;
+$brand-10: #fcdacf;
+$brand-5: #feece7;
+$brand-1: #fef8f5;
+
+$blue-100: #023dff;
+$blue-90: #1e52ff;
+$blue-80: #4772ff;
+$blue-70: #5a80ff;
+$blue-60: #6c8eff;
+$blue-50: #7f9dff;
+$blue-40: #91abff;
+$blue-30: #b5c6ff;
+$blue-20: #c8d5ff;
+$blue-10: #dae3ff;
+$blue-5: #f1f4ff;
+$blue-1: #f8faff;
+
+$orange-100: #d65809;
+$orange-90: #ed6611;
+$orange-80: #ef7629;
+$orange-70: #f18541;
+$orange-60: #f39459;
+$orange-50: #f4a370;
+$orange-40: #f6b388;
+$orange-30: #f8c2a0;
+$orange-20: #fad2b8;
+$orange-10: #fbe0cf;
+$orange-5: #fef0e8;
+$orange-1: #fef7f3;
+
+$purple-100: #7002ff;
+$purple-90: #801eff;
+$purple-80: #9747ff;
+$purple-70: #a25aff;
+$purple-60: #ac6cff;
+$purple-50: #b77fff;
+$purple-40: #c191ff;
+$purple-30: #d5b5ff;
+$purple-20: #e0c8ff;
+$purple-10: #eadaff;
+$purple-5: #f7f1ff;
+$purple-1: #fbf8ff;
+
+$red-100: #b71313;
+$red-90: #c70505;
+$red-80: #d30808;
+$red-70: #e10f0f;
+$red-60: #e72b2b;
+$red-50: #ef4747;
+$red-40: #f35f5f;
+$red-30: #f77676;
+$red-20: #fa8d8d;
+$red-10: #fcb1b1;
+$red-5: #fed1d1;
+$red-1: #ffeaea;
+
+$green-100: #458a00;
+$green-90: #58961a;
+$green-80: #6aa133;
+$green-70: #7dae4d;
+$green-60: #8fb966;
+$green-50: #a1c47f;
+$green-40: #b5d099;
+$green-30: #c8dcb3;
+$green-20: #dae8cc;
+$green-10: #e8f1e0;
+$green-5: #f2f7ed;
+$green-1: #f9fbf7;
+
+$yellow-100: #d08700;
+$yellow-90: #d5931a;
+$yellow-80: #d99f33;
+$yellow-70: #dfab4d;
+$yellow-60: #e3b766;
+$yellow-50: #e7c27f;
+$yellow-40: #eccf99;
+$yellow-30: #f1dbb3;
+$yellow-20: #f6e7cc;
+$yellow-10: #f9f0e0;
+$yellow-5: #fcf6ed;
+$yellow-1: #fdfaf5;
+
+$teal-100: #007d77;
+$teal-90: #1a8a85;
+$teal-80: #339792;
+$teal-70: #4da4a0;
+$teal-60: #66b1ad;
+$teal-50: #7fbdba;
+$teal-40: #99cbc9;
+$teal-30: #b3d8d7;
+$teal-20: #cce5e4;
+$teal-10: #e0efee;
+$teal-5: #edf6f5;
+$teal-1: #f7fbfb;
+
+$pink-100: #b9003b;
+$pink-90: #c01a4f;
+$pink-80: #b6335d;
+$pink-70: #c04d71;
+$pink-60: #d56689;
+$pink-50: #db7f9c;
+$pink-40: #e399b1;
+$pink-30: #eab3c5;
+$pink-20: #f1ccd8;
+$pink-10: #f6e0e7;
+$pink-5: #faedf1;
+$pink-1: #fdf7f9;
+
+$cyan-100: #0072b9;
+$cyan-90: #1a81c0;
+$cyan-80: #338ec7;
+$cyan-70: #4d9dce;
+$cyan-60: #66aad5;
+$cyan-50: #7fb8db;
+$cyan-40: #99c7e3;
+$cyan-30: #b3d5ea;
+$cyan-20: #cce3f1;
+$cyan-10: #e0eef6;
+$cyan-5: #edf5fa;
+$cyan-1: #f7fafd;
+
+// Text&Icon colors
+
+$text-primary-default: $black-90;
+$text-primary-hover: $black-80;
+$text-primary-active: $black-100;
+
+$text-secondary-default: $black-70;
+$text-secondary-hover: $black-60;
+$text-secondary-active: $black-80;
+
+$text-tertiary-default: $black-40;
+$text-tertiary-hover: $black-30;
+$text-tertiary-active: $black-50;
+
+$text-error-default: $red-90;
+$text-error-hover: $red-80;
+$text-error-active: $red-100;
+
+$text-inverse: #ffffff;
+
+// Outline colors
+
+$outline-primary-default: $black-3;
+$outline-primary-hover: $black-4;
+$outline-primary-active: $black-5;
+
+$outline-error-default: $red-60;
+$outline-error-hover: $red-50;
+$outline-error-active: $red-70;
+
+$outline-accent-default: $brand-50;
+$outline-accent-hover: $brand-40;
+$outline-accent-active: $brand-60;
+
+// Button colors
+
+$button-primary-default: $black-90;
+$button-primary-hover: $black-80;
+$button-primary-active: $black-100;
+
+$button-accent-default: $brand-90;
+$button-accent-hover: $brand-80;
+$button-accent-active: $brand-100;
+
+$button-secondary-accent-default: $orange-10;
+$button-secondary-accent-hover: $orange-5;
+$button-secondary-accent-active: $orange-20;
+
+$button-tertiary-accent-default: $blue-10;
+$button-tertiary-accent-hover: $blue-5;
+$button-tertiary-accent-active: $blue-20;
+
+// Background colors
+
+$background-universal: $black-1;
+
+$background-neutral-default: $black-2;
+$background-neutral-hover: $black-3;
+$background-neutral-active: $black-4;
+
+$background-blue-default: $blue-10;
+$background-blue-hover: $blue-5;
+$background-blue-active: $blue-20;
+
+$background-orange-default: $orange-5;
+$background-orange-hover: $orange-10;
+$background-orange-active: $orange-20;

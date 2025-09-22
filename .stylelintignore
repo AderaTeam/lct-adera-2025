@@ -1,0 +1,4 @@
+dist*
+
+# TODO: подумать, нужно ли их игнорировать
+packages/frontend/lib/ui/styles/*.css

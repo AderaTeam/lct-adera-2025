@@ -1,0 +1,85 @@
+@layer reset {
+  :root {
+    /* TODO – перестать указывать в сервисах шрифты на уровне html и убрать здесь переменную */
+    --cn-ui-font-family: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans',
+      sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  }
+
+  /* При наличии плавающего лейбла у инпута скрывается его родной плейсхолдер */
+  /* Кроме случая disabled, тогда лейбл не отображается вообще */
+  label.cn-ui-label + input.cn-ui-input:not([type='checkbox']):not([type='radio']):not(:disabled)::placeholder {
+    opacity: 0 !important;
+  }
+
+  input.cn-ui-input[type='checkbox'] + label.cn-ui-label {
+    cursor: pointer !important;
+  }
+
+  input.cn-ui-input:disabled::placeholder {
+    color: #aaaaa8 !important; /* cold-gray-300 */
+  }
+
+  input.cn-ui-input[type='number']::-webkit-outer-spin-button,
+  input.cn-ui-input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  input.cn-ui-input[type='number'],
+  input.cn-ui-input[type='number']:hover,
+  input.cn-ui-input[type='number']:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+  }
+
+  @keyframes cn-ui-loader-before {
+    0% {
+      box-shadow:
+        16px -8px rgba(213, 208, 200, 1),
+        -16px 8px rgba(240, 238, 235, 1);
+      width: 8px;
+    }
+    35% {
+      box-shadow:
+        0 -8px rgba(213, 208, 200, 1),
+        0 8px rgba(240, 238, 235, 1);
+      width: 40px;
+    }
+    70% {
+      box-shadow:
+        -16px -8px rgba(213, 208, 200, 1),
+        16px 8px rgba(240, 238, 235, 1);
+      width: 8px;
+    }
+    100% {
+      box-shadow:
+        16px -8px rgba(213, 208, 200, 1),
+        -16px 8px rgba(240, 238, 235, 1);
+    }
+  }
+
+  @keyframes cn-ui-loader-after {
+    0% {
+      box-shadow:
+        8px 16px rgba(255, 100, 74, 1),
+        -8px -16px rgba(230, 227, 222, 1);
+      height: 8px;
+    }
+    35% {
+      box-shadow:
+        8px 0 rgba(255, 100, 74, 1),
+        -8px 0 rgba(230, 227, 222, 1);
+      height: 40px;
+    }
+    70% {
+      box-shadow:
+        8px -16px rgba(255, 100, 74, 1),
+        -8px 16px rgba(230, 227, 222, 1);
+      height: 8px;
+    }
+    100% {
+      box-shadow:
+        8px 16px rgba(255, 100, 74, 1),
+        -8px -16px rgba(230, 227, 222, 1);
+    }
+  }
+}

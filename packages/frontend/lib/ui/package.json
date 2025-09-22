@@ -1,0 +1,28 @@
+{
+  "name": "@adera/ui",
+  "main": "index.ts",
+  "type": "module",
+  "peerDependencies": {
+    "@stylexjs/stylex": "^0.10.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^6.23.0",
+    "typescript": "~5.5.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-checkbox": "^1.1.0",
+    "@radix-ui/react-radio-group": "^1.2.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "clsx": "^2.1.0",
+    "sanitize.css": "^13.0.0"
+  },
+  "devDependencies": {
+    "@stylexjs/stylex": "^0.11.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^6.23.0",
+    "typescript": "~5.5.0"
+  }
+}

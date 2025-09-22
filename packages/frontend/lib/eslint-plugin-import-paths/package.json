@@ -1,0 +1,8 @@
+{
+  "name": "@adera/eslint-plugin-import-paths",
+  "main": "index.mjs",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}

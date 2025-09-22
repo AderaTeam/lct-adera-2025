@@ -1,0 +1,15 @@
+{
+  "name": "@adera/common-enums",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "exports": {
+    ".": "./index.js"
+  },
+  "types": "index.d.ts",
+  "devDependencies": {
+    "typescript": "~5.8.0"
+  }
+}

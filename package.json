@@ -1,0 +1,50 @@
+{
+  "name": "adera",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/frontend/adera-dashboard",
+    "packages/frontend/lib/*",
+    "packages/lib/*"
+  ],
+  "devDependencies": {
+    "@adera/eslint-plugin-import-paths": "workspace:*",
+    "@eslint/js": "^9.12.0",
+    "@stylexjs/eslint-plugin": "^0.6.0",
+    "eslint": "^9.12.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.0",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "eslint-plugin-unused-imports": "^4.1.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-standard-scss": "^13.1.0",
+    "typescript": "~5.5.0",
+    "typescript-eslint": "^8.10.0"
+  },
+  "scripts": {
+    "postinstall": "husky",
+    "stylelint": "stylelint --fix \"**/*.{css,scss}\"",
+    "eslint": "eslint --fix .",
+    "prettier": "prettier --write ."
+  },
+  "lint-staged": {
+    "*.{css,scss}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "!(*.css|*.scss)": [
+      "eslint --fix --no-warn-ignored",
+      "prettier --write --ignore-unknown"
+    ]
+  },
+  "packageManager": "yarn@4.6.0"
+}
