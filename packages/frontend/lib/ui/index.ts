@@ -10,7 +10,6 @@ export * from './components/Collapse';
 export * from './components/Combobox';
 export * from './components/Container';
 export * from './components/Flex';
-export * from './components/Folder';
 export * from './components/Footer';
 export * from './components/Grid';
 export * from './components/IconButton';
@@ -18,8 +17,6 @@ export * from './components/InfiniteScroll';
 export * from './components/Input';
 export * from './components/Modal';
 export * from './components/MultiSelect';
-export * from './components/NumberInput';
-export * from './components/ProgressBar';
 export * from './components/Radio';
 export * from './components/Select';
 export * from './components/Sheet';
@@ -46,8 +43,6 @@ export { useUncontrolled } from './hooks/useUncontrolled';
  */
 export * from './features/PositionObserver';
 export * from './features/PageTitle';
-export * from './features/WizardLoader';
-export * from './features/ShowPasswordButton';
 
 /**
  * Utils
