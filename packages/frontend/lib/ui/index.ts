@@ -1,6 +1,7 @@
 /**
  * Components
  */
+export * from './components/Button';
 export * from './components/Container';
 export * from './components/Flex';
 export * from './components/Footer';
@@ -13,6 +14,7 @@ export * from './components/Stack';
  * Icons & Logos
  */
 export * from './components/Icon';
+export * from './components/Logo';
 
 /**
  * Hooks

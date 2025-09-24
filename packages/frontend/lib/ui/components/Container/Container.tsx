@@ -18,12 +18,8 @@ export function Container({ children, style, asChild }: ContainerProps) {
 const styles = stylex.create({
   root: {
     marginHorizontal: 'auto',
-    maxWidth: {
-      default: 868,
-      '@media(min-width: 1204px)': 1084,
-      '@media(min-width: 1564px)': 1444
-    },
-    paddingBlock: 30,
+    paddingBlock: 32,
+    paddingInline: { default: 40, '@media (min-width: 1580px)': 80 },
     width: '100%'
   }
 });

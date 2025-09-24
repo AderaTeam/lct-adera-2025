@@ -30,7 +30,7 @@ const styles = stylex.create({
     animationIterationCount: 'infinite',
     animationName: rotate,
     animationTimingFunction: 'linear',
-    color: colors.brand80
+    color: colors.blue80
   },
   sm: {},
   md: {},
