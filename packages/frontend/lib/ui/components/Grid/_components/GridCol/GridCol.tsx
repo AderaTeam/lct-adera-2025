@@ -23,6 +23,7 @@ export const GridCol = ({ children, span = 1, style, asChild, ...props }: GridCo
 
 const styles = stylex.create({
   root: (span: number) => ({
-    gridColumn: `span ${span.toString()}`
+    gridColumn: `span ${span.toString()}`,
+    height: '100%'
   })
 });
