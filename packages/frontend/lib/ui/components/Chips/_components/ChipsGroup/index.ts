@@ -1,1 +1,0 @@
-export { ChipsGroup } from './ChipsGroup';
