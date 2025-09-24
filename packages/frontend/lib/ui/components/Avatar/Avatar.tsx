@@ -3,7 +3,6 @@ import * as stylex from '@stylexjs/stylex';
 import { StyleXStyles } from '@stylexjs/stylex';
 import { colors } from '@adera/ui/tokens.stylex';
 import { AderaSize } from '../../styles/AderaSize';
-import { UserIcon } from '../Icon';
 
 interface AvatarProps {
   src?: string | null;
@@ -43,11 +42,7 @@ export function Avatar({ src, alt, size = 'md', style, stubIcon }: AvatarProps) 
   return (
     <div {...stylex.props(styles.root, styles[size], !isValid && styles.noImage, style)}>
       <div {...stylex.props(styles[size], styles.border)}>
-        {isValid ? (
-          <img src={src ?? undefined} alt={alt} {...stylex.props(styles.image)} />
-        ) : (
-          (stubIcon ?? <UserIcon />)
-        )}
+        {isValid ? <img src={src ?? undefined} alt={alt} {...stylex.props(styles.image)} /> : stubIcon}
       </div>
     </div>
   );

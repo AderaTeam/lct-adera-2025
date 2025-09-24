@@ -23,9 +23,7 @@ const styles = stylex.create({
       '@media(min-width: 1204px)': 1084,
       '@media(min-width: 1564px)': 1444
     },
-    padding: {
-      default: '32px 0'
-    },
+    paddingBlock: 30,
     width: '100%'
   }
 });
