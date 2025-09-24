@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import * as stylex from '@stylexjs/stylex';
+import { colors } from '@adera/ui/tokens.stylex';
 
 export const Card = ({ children }: { children?: ReactNode }) => {
   return <div {...stylex.props(styles.root)}>{children}</div>;
@@ -7,7 +8,7 @@ export const Card = ({ children }: { children?: ReactNode }) => {
 
 const styles = stylex.create({
   root: {
-    backgroundColor: '#1D1D29',
+    backgroundColor: colors.backgroundSecondary,
     borderRadius: 16,
     height: '100%',
     padding: 24,
