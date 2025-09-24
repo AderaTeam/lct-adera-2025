@@ -55,5 +55,11 @@ export const headers = stylex.create({
     fontSize: 18,
     fontWeight: 500,
     lineHeight: '110%'
+  },
+  numeric: {
+    fontFamily: fontFamily.base,
+    fontSize: 56,
+    fontWeight: 600,
+    lineHeight: '100%'
   }
 });

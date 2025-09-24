@@ -76,6 +76,13 @@ $font-family:
   line-height: 110%;
 }
 
+@mixin numeric {
+  font-family: $font-family;
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 100%;
+}
+
 @mixin text-default-regular {
   font-family: $font-family;
   font-size: 14px;
