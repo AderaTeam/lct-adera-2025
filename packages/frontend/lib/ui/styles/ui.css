@@ -1,8 +1,9 @@
 @layer reset {
   :root {
     /* TODO – перестать указывать в сервисах шрифты на уровне html и убрать здесь переменную */
-    --cn-ui-font-family: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans',
-      sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --cn-ui-font-family:
+      'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   }
 
   /* При наличии плавающего лейбла у инпута скрывается его родной плейсхолдер */
@@ -82,4 +83,8 @@
         -8px -16px rgba(230, 227, 222, 1);
     }
   }
+}
+
+.recharts-surface:focus {
+  outline: none;
 }
