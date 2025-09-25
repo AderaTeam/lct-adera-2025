@@ -32,6 +32,12 @@ export const colors = stylex.defineVars({
   outlineErrorHover: '#FF806C', // error-active
   outlineErrorActive: '#EB4025', // error-active-dark
 
+  // States colors
+
+  statusError: '#EA604A',
+  statusNeutral: '#F2D849',
+  statusSuccess: '#39BF73',
+
   // Button colors
 
   buttonPrimaryDefault: '#1E52FF', // blue-90
