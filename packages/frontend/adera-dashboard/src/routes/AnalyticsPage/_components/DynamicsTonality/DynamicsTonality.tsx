@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as stylex from '@stylexjs/stylex';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, LineChart } from 'recharts';
 import { Flex, Grid, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
@@ -9,46 +9,69 @@ import { CustomXTick, CustomYTick } from '../CustomTick';
 const data = [
   {
     name: 'Page A',
-    uv: 10
+    uv: 4000,
+    pv: 2400,
+    amt: 2400
   },
   {
     name: 'Page B',
-    uv: 20
+    uv: 3000,
+    pv: 1398,
+    amt: 2210
   },
   {
     name: 'Page C',
-    uv: 60
+    uv: 2000,
+    pv: 9800,
+    amt: 2290
   },
   {
     name: 'Page D',
-    uv: 80
+    uv: 2780,
+    pv: 3908,
+    amt: 2000
   },
   {
     name: 'Page E',
-    uv: 20
+    uv: 1890,
+    pv: 4800,
+    amt: 2181
   },
   {
     name: 'Page F',
-    uv: 40
+    uv: 2390,
+    pv: 3800,
+    amt: 2500
   },
   {
     name: 'Page G',
-    uv: 100
+    uv: 3490,
+    pv: 4300,
+    amt: 2100
   }
 ];
 
-export const DynamicsNumber = () => {
+export const DynamicsTonality = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const keys = [
+    { key: 'uv', color: '#37CD78' },
+    { key: 'pv', color: '#D0B938' },
+    { key: 'amt', color: '#D46958' }
+  ];
 
   return (
     <Grid.Col span={9}>
       <Card style={styles.root}>
-        <Flex gap={10}>
-          <div {...stylex.props(text.subheaderBold)}>Динамика количества отзывов</div>
+        <Flex justify="space-between">
+          <Flex gap={10}>
+            <div {...stylex.props(text.subheaderBold)}>Динамика тональности</div>
+          </Flex>
+          <Flex gap={10}></Flex>
         </Flex>
 
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
+          <LineChart
             onMouseMove={(state) => {
               if (state.isTooltipActive && state.activeTooltipIndex) setActiveIndex(+state.activeTooltipIndex);
               else setActiveIndex(null);
@@ -60,15 +83,9 @@ export const DynamicsNumber = () => {
             margin={{
               top: 5,
               right: 5,
-              left: -25,
+              left: -12,
               bottom: 0
             }}>
-            <defs>
-              <linearGradient id="uvGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={colors.blue80} stopOpacity={0.3} />
-                <stop offset="100%" stopColor="#47FFD4" stopOpacity={0} />
-              </linearGradient>
-            </defs>
             <CartesianGrid
               stroke="#F1F1F11A"
               strokeDasharray="0"
@@ -77,7 +94,6 @@ export const DynamicsNumber = () => {
                 return [top];
               }}
             />
-
             <XAxis
               tick={(props) => <CustomXTick {...props} activeIndex={activeIndex} />}
               tickMargin={5}
@@ -92,16 +108,18 @@ export const DynamicsNumber = () => {
                 strokeDasharray: '8 4'
               }}
             />
-            <Area
-              style={{ outline: 'none' }}
-              tabIndex={-1}
-              type="linear"
-              dataKey="uv"
-              strokeWidth={3}
-              stroke={colors.blue80}
-              fill="url(#uvGradient)"
-            />
-          </AreaChart>
+            {keys.map((l) => (
+              <Line
+                key={l.key}
+                isAnimationActive={false}
+                type="linear"
+                dataKey={l.key}
+                stroke={l.color}
+                dot={false}
+                strokeWidth={3}
+              />
+            ))}
+          </LineChart>
         </ResponsiveContainer>
       </Card>
     </Grid.Col>
