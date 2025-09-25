@@ -3,6 +3,7 @@ import { Container, Grid } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
 import { AnomalyPeriods } from './_components/AnomalyPeriods';
+import { DynamicsNumber } from './_components/DynamicsNumber';
 import { MostReviews } from './_components/MostReviews';
 import { Tonality } from './_components/Tonality';
 import { TopReviews } from './_components/TopReviews';
@@ -33,17 +34,11 @@ export const AnalyticsPage = () => {
             negativeCount={data.counts.negativeCount}
           />
           <TopReviews topics={data.topics} />
-
           <Grid.Col span={9}>
             <Card></Card>
           </Grid.Col>
-
           <AnomalyPeriods />
-
-          <Grid.Col span={9}>
-            <Card></Card>
-          </Grid.Col>
-
+          <DynamicsNumber />
           <MostReviews />
         </Grid>
       </Container>

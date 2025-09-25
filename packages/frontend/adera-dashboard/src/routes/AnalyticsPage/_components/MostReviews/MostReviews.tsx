@@ -59,7 +59,7 @@ const styles = stylex.create({
     color: colors.textSecondaryDefault,
     display: 'flex',
     justifyContent: 'center',
-    paddingBlock: 15,
+    paddingBlock: 6,
     paddingInline: 10,
     textAlign: 'center',
     width: 100
