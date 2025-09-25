@@ -1,0 +1,1 @@
+export { TopReviews } from './TopReviews';

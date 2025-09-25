@@ -1,9 +1,10 @@
 import { Fragment, ReactNode } from 'react';
 import * as stylex from '@stylexjs/stylex';
-import { Grid, headers, MessageIcon, text } from '@adera/ui';
-import { Card } from 'components/Card';
+import { Grid, headers, MessageIconM, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
-import { NegativeIcon, NeutralIcon, PositiveIcon } from 'routes/AnalyticsPage/_icons';
+import { Card } from 'components/Card';
+import { calcPercents } from 'utils/calcPercents';
+import { NegativeIcon, NeutralIcon, PositiveIcon } from '../../_icons';
 
 export const Tonality = ({
   positiveCount,
@@ -14,13 +15,33 @@ export const Tonality = ({
   neutralCount: number;
   negativeCount: number;
 }) => {
-  const max = positiveCount + negativeCount + neutralCount;
+  const [positivePercent, neutralPercent, negativePercent] = calcPercents([positiveCount, neutralCount, negativeCount]);
+
+  const max = positiveCount + neutralCount + negativeCount;
 
   return (
     <Fragment>
-      <TonalityCard label="Положительные" count={positiveCount} max={max} icon={<PositiveIcon />} />
-      <TonalityCard label="Нейтральные" count={neutralCount} max={max} icon={<NeutralIcon />} />
-      <TonalityCard label="Негативные" count={negativeCount} max={max} icon={<NegativeIcon />} />
+      <TonalityCard
+        label="Положительные"
+        percent={positivePercent}
+        count={positiveCount}
+        max={max}
+        icon={<PositiveIcon />}
+      />
+      <TonalityCard
+        label="Нейтральные"
+        percent={neutralPercent}
+        count={neutralCount}
+        max={max}
+        icon={<NeutralIcon />}
+      />
+      <TonalityCard
+        label="Негативные"
+        percent={negativePercent}
+        count={negativeCount}
+        max={max}
+        icon={<NegativeIcon />}
+      />
     </Fragment>
   );
 };
@@ -28,13 +49,12 @@ export const Tonality = ({
 interface TonalityCardProps {
   label: string;
   count: number;
+  percent: number;
   icon?: ReactNode;
   max: number;
 }
 
-const TonalityCard = ({ label, count, max, icon }: TonalityCardProps) => {
-  const percent = count && max ? Math.floor((count / max) * 100) : 0;
-
+const TonalityCard = ({ label, count, max, percent, icon }: TonalityCardProps) => {
   return (
     <Grid.Col span={3}>
       <Card style={styles.card}>
@@ -46,7 +66,7 @@ const TonalityCard = ({ label, count, max, icon }: TonalityCardProps) => {
           <div {...stylex.props(headers.numeric)}>{percent}%</div>
         </div>
         <div {...stylex.props(styles.description, text.subheaderMedium)}>
-          <MessageIcon /> ({count}/{max})
+          <MessageIconM /> ({count}/{max})
         </div>
       </Card>
     </Grid.Col>
@@ -66,8 +86,8 @@ const styles = stylex.create({
   },
   description: {
     alignItems: 'center',
+    color: colors.textTertiaryDefault,
     display: 'flex',
-    gap: 5,
-    color: colors.textTertiaryDefault
+    gap: 5
   }
 });
