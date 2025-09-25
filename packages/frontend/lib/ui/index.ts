@@ -6,7 +6,9 @@ export * from './components/Container';
 export * from './components/Flex';
 export * from './components/Footer';
 export * from './components/Grid';
+export * from './components/IconButton';
 export * from './components/InfiniteScroll';
+export * from './components/Modal';
 export * from './components/Spinner';
 export * from './components/Stack';
 
