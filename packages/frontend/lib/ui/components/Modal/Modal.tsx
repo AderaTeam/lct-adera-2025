@@ -108,7 +108,7 @@ const ModalHeader = ({ style, children, ...props }: ModalComponentProps) => {
   const ctx = useModalContext();
 
   return (
-    <div {...props} onClick={ctx.open} {...stylex.props(styles.header, style)}>
+    <div {...props} {...stylex.props(styles.header, style)}>
       {children}
       {ctx.withCloseButton && (
         <IconButton variant={IconButtonVariant.ghost} size="sm" onClick={ctx.close}>
