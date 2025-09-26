@@ -2,6 +2,7 @@
  * Components
  */
 export * from './components/Button';
+export * from './components/Checkbox';
 export * from './components/Container';
 export * from './components/Flex';
 export * from './components/Footer';

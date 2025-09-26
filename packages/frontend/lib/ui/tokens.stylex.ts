@@ -18,9 +18,9 @@ export const colors = stylex.defineVars({
   textErrorDefault: '#EA604A', // error-default
   textErrorActive: '#FF806C', // error-active
 
-  textBlueDefault: '#4367DE', // blue-80
-  textBlueHover: '#4A6FEA', // blue-70
-  textBlueActive: '#3657C3', // blue-90
+  textBlueDefault: '#4772FF', // blue-80
+  textBlueHover: '#5A80FF', // blue-70
+  textBlueActive: '#1E52FF', // blue-90
 
   // Outline colors
 
@@ -40,17 +40,17 @@ export const colors = stylex.defineVars({
 
   // Button colors
 
-  buttonPrimaryDefault: '#1E52FF', // blue-90
-  buttonPrimaryHover: '#4772FF', // blue-80
-  buttonPrimaryActive: '#023DFF', // blue-100
+  buttonPrimaryDefault: '#3657C3', // blue-90
+  buttonPrimaryHover: '#4367DE', // blue-80
+  buttonPrimaryActive: '#294AB9', // blue-100
 
   buttonSecondaryDefault: '#262D40', // black-90
   buttonSecondaryHover: '#2E364D', // black-80
   buttonSecondaryActive: '#1D1D29', // black-100-darker
 
-  buttonTertiaryDefault: '#C8D5FF', // blue-20
-  buttonTertiaryHover: '#DAE3FF', // blue-10
-  buttonTertiaryActive: '#DAE3FF', // blue-10
+  buttonTertiaryDefault: '#7E9BFF', // blue-20
+  buttonTertiaryHover: '#91A8F9', // blue-20
+  buttonTertiaryActive: '#6B8CFF', // blue-10
 
   // Background colors
 
@@ -75,16 +75,16 @@ export const colors = stylex.defineVars({
   black2: '#EBEDF2',
   black1: '#F5F6FA',
 
-  blue100: '#023DFF',
-  blue90: '#1E52FF',
-  blue80: '#4772FF',
-  blue70: '#5A80FF',
-  blue60: '#6C8EFF',
-  blue50: '#7F9DFF',
-  blue40: '#91ABFF',
-  blue30: '#B5C6FF',
-  blue20: '#C8D5FF',
-  blue10: '#DAE3FF',
-  blue5: '#F1F4FF',
-  blue1: '#F8FAFF'
+  blue100: '#294AB9',
+  blue90: '#3657C3',
+  blue80: '#4367DE',
+  blue70: '#4A6FEA',
+  blue60: '#5679EE',
+  blue50: '#6485F5',
+  blue40: '#6B8CFF',
+  blue30: '#7E9BFF',
+  blue20: '#91A8F9',
+  blue10: '#9EB3FE',
+  blue5: '#AFC0FF',
+  blue1: '#BBCAFD'
 });

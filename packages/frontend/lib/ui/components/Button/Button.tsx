@@ -83,12 +83,14 @@ const styles = stylex.create({
       default: 'transparent',
       ':not(:disabled):hover': colors.buttonSecondaryHover,
       ':not(:disabled):active': colors.buttonSecondaryActive,
+      ':is([aria-selected=true])': colors.buttonSecondaryActive,
       ':disabled': colors.backgroundSecondary
     },
     color: {
       default: colors.textPrimaryDefault,
       ':not(:disabled):hover': colors.textPrimaryHover,
       ':not(:disabled):active': colors.textPrimaryActive,
+      ':is([aria-selected=true])': colors.textPrimaryActive,
       ':disabled': colors.black70
     }
   },
