@@ -29,6 +29,7 @@ export { useUncontrolled } from './hooks/useUncontrolled';
  */
 export * from './features/PositionObserver';
 export * from './features/PageTitle';
+export * from './features/Toast';
 
 /**
  * Utils
