@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import * as RadixCheckbox from '@radix-ui/react-checkbox';
 import { StyleXStyles } from '@stylexjs/stylex';
 import * as stylex from '@stylexjs/stylex';
@@ -16,7 +15,6 @@ export interface CheckboxProps extends Omit<RadixCheckbox.CheckboxProps, 'style'
 
 export function Checkbox({ style, checked, defaultChecked, onCheckedChange, value, ...props }: CheckboxProps) {
   const ctx = useCheckboxGroup();
-  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const handleCheckedChange = (checked: RadixCheckbox.CheckedState) => {
     onCheckedChange?.(checked);
@@ -33,21 +31,15 @@ export function Checkbox({ style, checked, defaultChecked, onCheckedChange, valu
 
   return (
     <RadixCheckbox.Root
-      onMouseEnter={() => {
-        setIsHovered(true);
-      }}
-      onMouseLeave={() => {
-        setIsHovered(false);
-      }}
       checked={_checked}
+      aria-checked={_checked === 'indeterminate' ? 'mixed' : _checked}
       onCheckedChange={setChecked}
       {...stylex.props(styles.root, style)}
       {...props}>
       <RadixCheckbox.Indicator {...stylex.props(styles.indicator)}>
-        {checked === 'indeterminate' && <MinusIcon {...stylex.props(styles.icon)} />}
+        {_checked === 'indeterminate' && <MinusIcon {...stylex.props(styles.icon)} />}
         {_checked === true && <CheckIcon {...stylex.props(styles.icon)} />}
       </RadixCheckbox.Indicator>
-      {!_checked && isHovered && <CheckIcon color={colors.textTertiaryHover} {...stylex.props(styles.icon)} />}
     </RadixCheckbox.Root>
   );
 }
@@ -58,19 +50,22 @@ const styles = stylex.create({
     backgroundColor: {
       default: colors.backgroundSecondary,
       ':not(:disabled):is([aria-checked=true])': colors.buttonPrimaryDefault,
+      ':not(:disabled):is([aria-checked=mixed])': colors.textBlueDefault,
       ':not(:disabled):is([aria-checked=false]):hover': 'transparent'
     },
     borderColor: {
       default: colors.outlinePrimaryDefault,
       ':not(disabled):is([aria-checked=false]):hover': colors.outlinePrimaryHover,
-      ':is([aria-checked=true])': colors.buttonPrimaryDefault
+      ':is([aria-checked=true])': colors.buttonPrimaryDefault,
+      ':is([aria-checked=mixed])': colors.textBlueDefault
     },
     borderRadius: 7,
     borderStyle: 'solid',
     borderWidth: 2,
     color: {
       default: 'transparent',
-      ':is([aria-checked=true])': colors.backgroundPrimary
+      ':is([aria-checked=true])': colors.backgroundPrimary,
+      ':is([aria-checked=mixed])': colors.backgroundPrimary
     },
     cursor: {
       default: 'pointer',
