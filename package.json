@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
+    "packages/backend/adera-core",
     "packages/frontend/adera-dashboard",
     "packages/frontend/lib/*",
     "packages/lib/*"
