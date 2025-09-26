@@ -1,0 +1,17 @@
+{
+  "name": "@adera/auth-fetch",
+  "main": "index.ts",
+  "type": "module",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "typescript": "~5.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0",
+    "typescript": "~5.5.0"
+  },
+  "dependencies": {
+    "@adera/common-enums": "workspace:*"
+  }
+}
