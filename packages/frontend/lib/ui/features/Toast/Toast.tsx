@@ -22,42 +22,34 @@ export const Toast = ({ id, title, status = ToastStatus.good, onClose }: ToastPr
   return (
     <div {...stylex.props(styles.root)}>
       <div {...stylex.props(styles.circle, styles[status])} />
-      <div {...stylex.props(styles.content)}>
-        <div {...stylex.props(text.defaultMedium)}>{title}</div>
-      </div>
+      <div {...stylex.props(text.defaultSemibold)}>{title}</div>
     </div>
   );
 };
 
 const styles = stylex.create({
   root: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: colors.backgroundSecondary,
     borderRadius: 12,
     color: colors.textPrimaryDefault,
     display: 'flex',
-    gap: 8,
+    gap: 12,
     maxWidth: 360,
-    paddingBlock: 16,
-    paddingInline: '20px 16px'
+    padding: 16
   },
   circle: {
     borderRadius: '50%',
-    height: 20,
-    width: 20
-  },
-  content: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 8
+    height: 16,
+    minWidth: 16
   },
   good: {
-    color: colors.statusSuccess
+    backgroundColor: colors.statusSuccess
   },
   info: {
-    color: colors.statusNeutral
+    backgroundColor: colors.statusNeutral
   },
   bad: {
-    color: colors.statusError
+    backgroundColor: colors.statusError
   }
 });
