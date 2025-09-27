@@ -5,6 +5,7 @@ import { Flex, Grid, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
 import { CustomXTick, CustomYTick } from '../CustomTick';
+import { CustomTooltip } from '../CustomTooltip';
 
 const data = [
   {
@@ -102,6 +103,23 @@ export const DynamicsTonality = () => {
             />
             <YAxis tick={(props) => <CustomYTick {...props} />} tickMargin={16} stroke="#F1F1F11A" />
             <Tooltip
+              content={(props) => (
+                <CustomTooltip>
+                  {!!(props.payload.length && props.active) && (
+                    <Flex style={styles.flex} gap={6}>
+                      <Flex gap={4}>
+                        <div {...stylex.props(styles.circle(colors.statusSuccess))}></div> {props.payload[0].value}
+                      </Flex>
+                      <Flex gap={4}>
+                        <div {...stylex.props(styles.circle(colors.statusNeutral))}></div> {props.payload[1].value}
+                      </Flex>
+                      <Flex gap={4}>
+                        <div {...stylex.props(styles.circle(colors.statusError))}></div> {props.payload[2].value}
+                      </Flex>
+                    </Flex>
+                  )}
+                </CustomTooltip>
+              )}
               cursor={{
                 stroke: colors.blue80,
                 strokeWidth: 2,
@@ -131,5 +149,14 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 24
-  }
+  },
+  flex: {
+    paddingInline: 10
+  },
+  circle: (backgroundColor) => ({
+    width: 11,
+    height: 11,
+    borderRadius: '50%',
+    backgroundColor
+  })
 });

@@ -5,6 +5,7 @@ import { Flex, Grid, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
 import { CustomXTick, CustomYTick } from '../CustomTick';
+import { CustomTooltip } from '../CustomTooltip';
 
 const data = [
   {
@@ -86,6 +87,9 @@ export const DynamicsNumber = () => {
             />
             <YAxis tick={(props) => <CustomYTick {...props} />} tickMargin={16} stroke="#F1F1F11A" />
             <Tooltip
+              content={(props) => (
+                <CustomTooltip>{!!(props.payload.length && props.active) && props.payload[0].value}</CustomTooltip>
+              )}
               cursor={{
                 stroke: colors.blue80,
                 strokeWidth: 2,
