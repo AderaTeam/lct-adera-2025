@@ -1,0 +1,9 @@
+# Конфиденциальные файлы
+.env
+passwords.conf
+secrets/
+*.key
+*.pem
+
+# Временные файлы
+init-scripts/*-temp.sql
