@@ -215,4 +215,4 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 configs.json
-./cb_model
+cb_model
