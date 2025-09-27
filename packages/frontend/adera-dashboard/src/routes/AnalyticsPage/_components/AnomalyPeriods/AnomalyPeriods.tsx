@@ -15,7 +15,7 @@ export const AnomalyPeriods = () => {
                 <MoodSmileIcon />
               </div>
               <Stack gap={2}>
-                <div {...stylex.props(text.defaultBold, styles.countSuccess)}>12 отзывов</div>
+                <div {...stylex.props(text.defaultBold, styles.countSuccess)}>12 упоминаний</div>
                 <div {...stylex.props(text.defaultRegular)}>Самый позитивный</div>
               </Stack>
             </Stack>
@@ -29,7 +29,7 @@ export const AnomalyPeriods = () => {
                 <MoodSadIcon />
               </div>
               <Stack gap={2}>
-                <div {...stylex.props(text.defaultBold, styles.countError)}>12 отзывов</div>
+                <div {...stylex.props(text.defaultBold, styles.countError)}>12 упоминаний</div>
                 <div {...stylex.props(text.defaultRegular)}>Самый негативный </div>
               </Stack>
             </Stack>

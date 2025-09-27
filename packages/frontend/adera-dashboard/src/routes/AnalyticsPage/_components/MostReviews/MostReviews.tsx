@@ -25,7 +25,7 @@ export const MostReviews = () => {
             </div>
           </Flex>
           <Flex style={styles.block} gap={12}>
-            <h1 {...stylex.props(headers.h1Medium)}>5</h1> <div>- обычно в среднем за период</div>
+            <h1 {...stylex.props(headers.h1Medium)}>5</h1> <div>- в среднем за период</div>
           </Flex>
         </Stack>
       </Card>

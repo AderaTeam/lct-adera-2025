@@ -4,10 +4,14 @@ import { SortDirections } from 'store/_types';
 
 export interface FiltersState {
   sort_review_top: SortDirections;
+  sources: string;
+  products: string;
 }
 
 export const DEFAULT_FILTERS: FiltersState = {
-  sort_review_top: SortDirections.asc
+  sort_review_top: SortDirections.asc,
+  sources: 'all',
+  products: 'all'
 };
 
 function parseSortDirection(value: string | null, defaultValue: SortDirections): SortDirections {
@@ -16,7 +20,9 @@ function parseSortDirection(value: string | null, defaultValue: SortDirections):
 
 export function parseFilters(params: URLSearchParams): FiltersState {
   return {
-    sort_review_top: parseSortDirection(params.get('sort_review_top'), DEFAULT_FILTERS.sort_review_top)
+    sort_review_top: parseSortDirection(params.get('sort_review_top'), DEFAULT_FILTERS.sort_review_top),
+    sources: params.get('sources') ?? DEFAULT_FILTERS.sources,
+    products: params.get('products') ?? DEFAULT_FILTERS.products
   };
 }
 

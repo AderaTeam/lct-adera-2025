@@ -1,6 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
-import { Container, Grid } from '@adera/ui';
+import { Container, Flex, Grid, headers } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
+import { Filters } from 'features/Filters';
 import { AnomalyPeriods } from './_components/AnomalyPeriods';
 import { DynamicsNumber } from './_components/DynamicsNumber';
 import { DynamicsTonality } from './_components/DynamicsTonality';
@@ -25,8 +26,12 @@ const data = {
 
 export const AnalyticsPage = () => {
   return (
-    <main {...stylex.props(styles.root)}>
-      <Container>
+    <main>
+      <Container style={styles.root}>
+        <Flex justify="space-between">
+          <h1 {...stylex.props(headers.h1Semibold)}>Общая аналитика</h1>
+          <Filters />
+        </Flex>
         <Grid gap={20} rowGap={20}>
           <Tonality
             positiveCount={data.counts.positiveCount}
@@ -46,6 +51,9 @@ export const AnalyticsPage = () => {
 
 const styles = stylex.create({
   root: {
-    color: colors.textPrimaryDefault
+    color: colors.textPrimaryDefault,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 32
   }
 });

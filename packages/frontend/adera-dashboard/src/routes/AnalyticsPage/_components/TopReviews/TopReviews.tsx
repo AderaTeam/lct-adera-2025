@@ -166,9 +166,9 @@ const styles = stylex.create({
     gap: 8,
     listStyle: 'none',
     margin: 0,
-    padding: 0,
     maxHeight: 610,
     overflow: 'auto',
+    padding: 0,
     '::-webkit-scrollbar': {
       background: 'transparent',
       display: 'none',
