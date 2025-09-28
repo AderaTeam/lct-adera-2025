@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import * as stylex from '@stylexjs/stylex';
+import { NavLink } from 'react-router-dom';
 import {
-  ArrowsRightIcon,
+  ArrowRightIcon,
   Button,
   ButtonVariant,
   CircleCheckFilledIcon,
@@ -73,9 +74,11 @@ export const FileList = ({ loading, files }: { loading: boolean; files: string[]
                   <Button variant={ButtonVariant.tertiaryAccent}>
                     Скачать .json <DownloadIcon />
                   </Button>
-                  <Button>
-                    Смотреть аналитику <ArrowsRightIcon />
-                  </Button>
+                  <NavLink to={`/upload/{1}`}>
+                    <Button>
+                      Смотреть аналитику <ArrowRightIcon />
+                    </Button>
+                  </NavLink>
                 </Flex>
               </Flex>
             </Grid.Col>
