@@ -6,4 +6,4 @@ secrets/
 *.pem
 
 # Временные файлы
-init-scripts/*-temp.sql
+!init-scripts/*-temp.sql

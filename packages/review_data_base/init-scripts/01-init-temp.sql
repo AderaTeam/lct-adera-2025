@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS reviews (
     review_id SERIAL PRIMARY KEY,
     review_title VARCHAR(500) NOT NULL,
     review_text TEXT NOT NULL,
-    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
-    review_date DATE NOT NULL,
+    rating INTEGER,
+    review_date DATE,
     city_id INTEGER REFERENCES cities(city_id),
     source_id INTEGER REFERENCES sources(source_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS review_topics (
     review_topic_id SERIAL PRIMARY KEY,
     review_id INTEGER REFERENCES reviews(review_id) ON DELETE CASCADE,
     topic_id INTEGER REFERENCES topics(topic_id),
-    topic_mood VARCHAR(50) NOT NULL CHECK (topic_mood IN ('positive', 'negative', 'neutral', 'mixed')),
+    topic_mood VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(review_id, topic_id)
 );
@@ -68,29 +68,3 @@ GRANT CONNECT ON DATABASE review_db TO admin;
 GRANT ALL PRIVILEGES ON DATABASE review_db TO admin;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin;
-
--- Вставка тестовых данных
-INSERT INTO sources (source_name) VALUES 
-    ('Yandex Maps'),
-    ('Google Maps'),
-    ('TripAdvisor'),
-    ('2GIS')
-ON CONFLICT (source_name) DO NOTHING;
-
-INSERT INTO cities (city_name) VALUES 
-    ('Москва'),
-    ('Санкт-Петербург'),
-    ('Новосибирск'),
-    ('Екатеринбург'),
-    ('Казань')
-ON CONFLICT (city_name) DO NOTHING;
-
-INSERT INTO topics (topic_name) VALUES 
-    ('качество обслуживания'),
-    ('чистота'),
-    ('цены'),
-    ('местоположение'),
-    ('атмосфера'),
-    ('персонал'),
-    ('продукты')
-ON CONFLICT (topic_name) DO NOTHING;
