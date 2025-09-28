@@ -1,4 +1,16 @@
 services:
+  nest:
+    image: node:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - ../:/lct-adera-2025/ # было ../../:/monorepo/
+    working_dir: /lct-adera-2025/ # было /monorepo/
+    entrypoint: bash -c "yarn c:start"
+    env_file: ../packages/backend/adera-core/.env
+    networks:
+      - backend_net
+
   postgres:
     image: postgres:16
     ports:
@@ -10,7 +22,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - adera_backend_net
+      - backend_net
 
   # MinIO
   minio:
@@ -24,13 +36,14 @@ services:
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
+    networks:
+      - backend_net
 
 volumes:
   postgres_data:
   minio_data:
 
 networks:
-  adera_backend_net:
-    name: adera_backend_net
+  backend_net:
+    name: backend_net
     driver: bridge
-    # external: true
