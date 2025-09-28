@@ -1,0 +1,41 @@
+services:
+  nest:
+    image: node:latest
+    ports: 
+      - 3000:3000
+    volumes:
+      - ../../:/monorepo/
+    working_dir: /monorepo/
+    entrypoint: bash -c "yarn c:start"
+    networks:
+      - backend_net
+    env_file: ./adera-core/.env
+
+  postgres:
+    image: postgres
+    restart: on-failure
+    ports:
+      - 5432:5432
+    env_file:
+      - ./postgres/.env
+    volumes:
+        - ./postgres/:/docker-entrypoint-initdb.d/
+        - ./postgres/data:/var/lib/postgresql/data
+    networks:
+      - backend_net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: on-failure
+    env_file:
+      - ./postgres/.env    
+    ports:
+      - '5050:80'
+    networks:
+      - backend_net
+
+networks:
+  backend_net:
+    name: backend_net
+    driver: bridge
+    # external: true
