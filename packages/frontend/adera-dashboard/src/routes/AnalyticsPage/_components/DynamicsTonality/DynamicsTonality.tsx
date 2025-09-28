@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as stylex from '@stylexjs/stylex';
-import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, LineChart } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, LineChart, TooltipProps } from 'recharts';
 import { Flex, Grid, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
@@ -51,6 +51,10 @@ const data = [
     amt: 2100
   }
 ];
+
+interface CustomPayload {
+  value: number;
+}
 
 export const DynamicsTonality = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -103,9 +107,9 @@ export const DynamicsTonality = () => {
             />
             <YAxis tick={(props) => <CustomYTick {...props} />} tickMargin={16} stroke="#F1F1F11A" />
             <Tooltip
-              content={(props) => (
+              content={(props: TooltipProps<number, string> & { payload?: CustomPayload[] }) => (
                 <CustomTooltip>
-                  {!!(props.payload.length && props.active) && (
+                  {!!(!!props.payload && props.payload.length && props.active) && (
                     <Flex style={styles.flex} gap={6}>
                       <Flex gap={4}>
                         <div {...stylex.props(styles.circle(colors.statusSuccess))}></div> {props.payload[0].value}
@@ -153,10 +157,10 @@ const styles = stylex.create({
   flex: {
     paddingInline: 10
   },
-  circle: (backgroundColor) => ({
-    width: 11,
-    height: 11,
+  circle: (backgroundColor: string) => ({
+    backgroundColor,
     borderRadius: '50%',
-    backgroundColor
+    height: 11,
+    width: 11
   })
 });
