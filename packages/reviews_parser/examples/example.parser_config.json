@@ -1,0 +1,85 @@
+{
+    "time_sleeps": {
+        "time_sleep_between_trying_request": 5,
+        "time_sleep_after_header_change": 20,
+        "time_sleep_after_ban": 60
+    },
+    "kafka_workers": [
+        {
+            "name": "ParsedDataSetterToKafka",
+            "worker_type": "producer",
+            "config": {
+                "bootstrap.servers": "localhost:9092",
+                "client.id": "python-producer"
+            }
+        },
+        {
+            "name": "ParsedDataSetterToDB",
+            "subscribes": ["ParsedData_BankiRu", "ParsedData_SravniRu"],
+            "worker_type": "consumer",
+            "config": {
+                "bootstrap.servers": "localhost:9092",
+                "group.id": "python-consumer-group",
+                "auto.offset.reset": "earliest" 
+            }
+        }
+    ],
+    "poison_pill_flag": "eow",
+    "parser_configs": {
+        "list_of_parsers": [
+            {
+                "name": "BankiRu",
+                "site": "banki.ru",
+                "parser_type": "scraber",
+                "topic": "ParsedData_BankiRu",
+                "producer": "ParsedDataSetterToKafka",
+                "header": {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "Accept-Language": "en-US,en;q=0.5",
+                    "Accept-Encoding": "gzip, deflate",
+                    "Connection": "keep-alive",
+                    "Upgrade-Insecure-Requests": "1"
+                },
+                "link": "https://www.banki.ru/services/responses/list/ajax/?page=0&is_countable=on&bank=gazprombank",
+                "pattern_to_replace": "<|IDX|>",
+                "query_value": "page"
+            },
+            {
+                "name": "SravniRu",
+                "site": "sravni.ru",
+                "parser_type": "scraber",
+                "topic": "ParsedData_SravniRu",
+                "producer": "ParsedDataSetterToKafka",
+                "header": {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "Accept-Language": "en-US,en;q=0.5",
+                    "Accept-Encoding": "gzip, deflate",
+                    "Connection": "keep-alive",
+                    "Upgrade-Insecure-Requests": "1"
+                },
+                "link": "https://www.sravni.ru/proxy-reviews/reviews?FilterBy=withRates&LocationGarId=&NewIds=true&OrderBy=byDate&PageIndex=0&PageSize=10&ReviewObjectId=5bb4f768245bc22a520a6115&ReviewObjectType=banks&SqueezesVectorIds=&Tag=&WithVotes=true&fingerPrint=f40a29cc0348f3b91114d603109059c4",
+                "pattern_to_replace": "<|IDX|>",
+                "query_value": "PageIndex"
+            }
+        ],
+        "available_user_agents": [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+        ]
+    },
+    "aggregators_configs": [
+        {
+            "name": "PgParserBankiRu",
+            "consumer": "ParsedDataSetterToDB",
+            "aggregator_type": "PostGressAgregator",
+            "password": "postgres123",
+            "user": "postgres",
+            "host": "localhost",
+            "port": "5432",
+            "database": "review_db"
+        }
+    ]
+}
