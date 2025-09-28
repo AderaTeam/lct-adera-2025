@@ -1,4 +1,4 @@
-import { HttpStatus } from '@Adera/common-enums';
+import { HttpStatus } from '@adera/common-enums';
 
 export interface AderaErrorBody {
   code: string;

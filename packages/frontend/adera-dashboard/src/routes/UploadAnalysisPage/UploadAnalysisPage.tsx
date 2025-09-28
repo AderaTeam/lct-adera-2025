@@ -1,10 +1,14 @@
 import * as stylex from '@stylexjs/stylex';
-import { NavLink } from 'react-router-dom';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { NavLink, useParams } from 'react-router-dom';
+import { useAuthFetch } from '@adera/auth-fetch';
 import { ArrowLeftIconL, Container, Flex, Grid, headers } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Filters } from 'features/Filters';
 import { Tonality } from 'features/Tonality';
 import { TopReviews } from 'features/TopReviews';
+import { ApiFileAnalysisDetail } from 'store/_types';
+import { invariant } from 'utils/invariant';
 
 const data = {
   topics: [
@@ -22,6 +26,15 @@ const data = {
 };
 
 export const UploadAnalysisPage = () => {
+  const { id } = useParams();
+  invariant(id);
+
+  const authFetch = useAuthFetch();
+  const { data: fileAnalysis } = useSuspenseQuery({
+    queryKey: ['file-analysis', { id }],
+    queryFn: () => authFetch<ApiFileAnalysisDetail>(`/file-analysis/${id}`)
+  });
+
   return (
     <main>
       <Container style={styles.root}>
@@ -30,7 +43,7 @@ export const UploadAnalysisPage = () => {
             <NavLink to={'/upload'}>
               <ArrowLeftIconL color={colors.textBlueDefault} />
             </NavLink>
-            <h1 {...stylex.props(headers.h1Semibold)}>Данные от 05.10.25 (3)</h1>
+            <h1 {...stylex.props(headers.h1Semibold)}>Данные от 05.10.25 (3) {fileAnalysis.id}</h1>
           </Flex>
           <Filters />
         </Flex>
