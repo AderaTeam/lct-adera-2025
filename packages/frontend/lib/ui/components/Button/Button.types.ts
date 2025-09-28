@@ -5,5 +5,6 @@ export enum ButtonWidth {
 
 export enum ButtonVariant {
   primary = 'primary',
-  ghost = 'ghost'
+  ghost = 'ghost',
+  tertiaryAccent = 'tertiaryAccent'
 }

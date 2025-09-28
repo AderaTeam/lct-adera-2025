@@ -3,13 +3,17 @@
  */
 export * from './components/Button';
 export * from './components/Checkbox';
+export * from './components/Combobox';
 export * from './components/Container';
+export * from './components/DateInput';
 export * from './components/Flex';
 export * from './components/Footer';
 export * from './components/Grid';
 export * from './components/IconButton';
 export * from './components/InfiniteScroll';
+export * from './components/Input';
 export * from './components/Modal';
+export * from './components/Select';
 export * from './components/Spinner';
 export * from './components/Stack';
 

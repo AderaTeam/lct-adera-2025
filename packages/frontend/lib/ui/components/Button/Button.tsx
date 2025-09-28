@@ -94,6 +94,22 @@ const styles = stylex.create({
       ':disabled': colors.black70
     }
   },
+  tertiaryAccent: {
+    backgroundColor: {
+      default: 'rgba(90, 128, 255, 0.2)',
+      ':not(:disabled):hover': 'rgba(90, 128, 255, 0.35)',
+      ':not(:disabled):active': 'rgba(90, 128, 255, 0.1)',
+      ':is([aria-selected=true])': 'rgba(90, 128, 255, 0.1)',
+      ':disabled': colors.backgroundSecondary
+    },
+    color: {
+      default: colors.textPrimaryDefault,
+      ':not(:disabled):hover': colors.textPrimaryHover,
+      ':not(:disabled):active': colors.textPrimaryActive,
+      ':is([aria-selected=true])': colors.textPrimaryActive,
+      ':disabled': colors.black70
+    }
+  },
   // size
   lg: {},
   md: {
