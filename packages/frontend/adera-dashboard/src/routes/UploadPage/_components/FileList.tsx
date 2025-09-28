@@ -1,23 +1,20 @@
 import { useState, useEffect } from 'react';
 import * as stylex from '@stylexjs/stylex';
-import { NavLink } from 'react-router-dom';
-import {
-  ArrowRightIcon,
-  Button,
-  ButtonVariant,
-  CircleCheckFilledIcon,
-  DownloadIcon,
-  Flex,
-  Grid,
-  headers,
-  MessageIconS,
-  Stack,
-  text
-} from '@adera/ui';
+import { Grid, Stack, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Skeleton } from 'features/Skeleton';
+import { ApiFileAnalysis } from 'store/_types';
+import { FileCard } from './FileCard';
 
-export const FileList = ({ loading, files }: { loading: boolean; files: string[] }) => {
+export const FileList = ({
+  loading,
+  files,
+  isNewFileCreating
+}: {
+  loading: boolean;
+  files: ApiFileAnalysis[];
+  isNewFileCreating: boolean;
+}) => {
   const [showSkeleton, setShowSkeleton] = useState(loading);
 
   // Минимальное время анимации
@@ -44,6 +41,11 @@ export const FileList = ({ loading, files }: { loading: boolean; files: string[]
 
   return (
     <Grid gap={16} rowGap={20}>
+      {!showSkeleton && isNewFileCreating && (
+        <Grid.Col span={9} style={styles.item}>
+          <FileCard loading={true} id="" objectKeyUrl={''} createdAt={''} reviewsCount={0} />
+        </Grid.Col>
+      )}
       {showSkeleton
         ? Array.from({ length: 3 }, (_, index) => index).map((c) => (
             <Grid.Col span={9} style={styles.item} key={c}>
@@ -58,29 +60,8 @@ export const FileList = ({ loading, files }: { loading: boolean; files: string[]
             </Grid.Col>
           ))
         : files.map((f) => (
-            <Grid.Col span={9} style={styles.item} key={f}>
-              <Flex gap={16} justify="space-between" align="flex-end">
-                <Stack gap={12}>
-                  <Flex gap={8}>
-                    <h3 {...stylex.props(headers.h3Semibold)}>
-                      <CircleCheckFilledIcon color={colors.statusSuccess} /> Данные от 05.10.25 (3)
-                    </h3>
-                  </Flex>
-                  <Flex gap={5} style={[text.defaultMedium, styles.status]}>
-                    <MessageIconS /> 100 комментариев
-                  </Flex>
-                </Stack>
-                <Flex gap={16}>
-                  <Button variant={ButtonVariant.tertiaryAccent}>
-                    Скачать .json <DownloadIcon />
-                  </Button>
-                  <NavLink to={`/upload/{1}`}>
-                    <Button>
-                      Смотреть аналитику <ArrowRightIcon />
-                    </Button>
-                  </NavLink>
-                </Flex>
-              </Flex>
+            <Grid.Col span={9} style={styles.item} key={f.id}>
+              <FileCard {...f} />
             </Grid.Col>
           ))}
     </Grid>
@@ -101,8 +82,5 @@ const styles = stylex.create({
     height: 18,
     overflow: 'hidden',
     width
-  }),
-  status: {
-    color: colors.textTertiaryDefault
-  }
+  })
 });
