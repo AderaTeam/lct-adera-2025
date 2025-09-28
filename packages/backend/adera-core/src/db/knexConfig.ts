@@ -1,23 +1,20 @@
 import type { Knex } from 'knex';
 
-import process from 'node:process';
-
-const env = process.env;
+import appConfig from '../common/appConfig';
 
 const knexConfig: Knex.Config = {
   client: 'pg',
   pool: {
     min: 2,
-    max: +env.POSTGRES_CONNECTION_POOL_SIZE,
+    max: appConfig.POSTGRES_CONNECTION_POOL_SIZE,
   },
-  debug: !!env.DEBUG_SQL || undefined,
   connection: {
-    host: env.POSTGRES_HOST,
-    port: +env.POSTGRES_PORT,
-    user: env.POSTGRES_USER,
-    password: env.POSTGRES_PASSWORD,
-    database: env.POSTGRES_DB,
-    ssl: env.POSTGRES_SSL ? { rejectUnauthorized: false } : false,
+    host: appConfig.POSTGRES_HOST,
+    port: appConfig.POSTGRES_PORT,
+    user: appConfig.POSTGRES_USER,
+    password: appConfig.POSTGRES_PASSWORD,
+    database: appConfig.POSTGRES_DB,
+    ssl: appConfig.POSTGRES_SSL ? { rejectUnauthorized: false } : false,
   },
 };
 

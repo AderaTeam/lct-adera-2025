@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ApiDirectory } from 'src/common/dto';
+import { db, DbTables } from 'src/db/db';
 
 @Injectable()
 export class DirectoriesService {
   constructor() {}
 
   async findSources(): Promise<ApiDirectory[]> {
-    return [
-      { id: 1, name: 'Банки.ру' },
-      { id: 2, name: 'Сравни.ру' },
-    ];
+    return await db(DbTables.Sources).select('*');
   }
 
   async findProducts(): Promise<ApiDirectory[]> {
