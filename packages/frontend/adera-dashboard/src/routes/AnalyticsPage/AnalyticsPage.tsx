@@ -2,12 +2,12 @@ import * as stylex from '@stylexjs/stylex';
 import { Container, Flex, Grid, headers } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Filters } from 'features/Filters';
+import { Tonality } from 'features/Tonality';
+import { TopReviews } from 'features/TopReviews';
 import { AnomalyPeriods } from './_components/AnomalyPeriods';
 import { DynamicsNumber } from './_components/DynamicsNumber';
 import { DynamicsTonality } from './_components/DynamicsTonality';
 import { MostReviews } from './_components/MostReviews';
-import { Tonality } from './_components/Tonality';
-import { TopReviews } from './_components/TopReviews';
 
 const data = {
   topics: [
