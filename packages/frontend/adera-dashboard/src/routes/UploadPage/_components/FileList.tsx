@@ -3,7 +3,7 @@ import * as stylex from '@stylexjs/stylex';
 import { Grid, Stack, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Skeleton } from 'features/Skeleton';
-import { ApiFileAnalysis } from 'store/_types';
+import { ApiFileAnalysisList } from 'store/_types';
 import { FileCard } from './FileCard';
 
 export const FileList = ({
@@ -12,7 +12,7 @@ export const FileList = ({
   isNewFileCreating
 }: {
   loading: boolean;
-  files: ApiFileAnalysis[];
+  files: ApiFileAnalysisList[];
   isNewFileCreating: boolean;
 }) => {
   const [showSkeleton, setShowSkeleton] = useState(loading);

@@ -3,14 +3,14 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { useAuthFetch } from '@adera/auth-fetch';
 import { Container, headers } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
-import { ApiFile, ApiFileAnalysis } from 'store/_types';
+import { ApiFile, ApiFileAnalysisList } from 'store/_types';
 import { queryClient } from 'store/queryClient';
 import { FileList } from './_components/FileList';
 import { FileUpload } from './_components/FileUpload';
 
 export const UploadPage = () => {
   const authFetch = useAuthFetch();
-  const { mutateAsync: createFileAnalysis, isPending } = useMutation<ApiFileAnalysis, Error, string>({
+  const { mutateAsync: createFileAnalysis, isPending } = useMutation<ApiFileAnalysisList, Error, string>({
     mutationFn: (objectKey: string) =>
       authFetch('/file-analysis', {
         method: 'POST',
@@ -24,7 +24,7 @@ export const UploadPage = () => {
 
   const { data: fileAnalysis, isFetching: loading } = useSuspenseQuery({
     queryKey: ['file-analysis'],
-    queryFn: () => authFetch<ApiFileAnalysis[]>('/file-analysis')
+    queryFn: () => authFetch<ApiFileAnalysisList[]>('/file-analysis')
   });
 
   const handleUploadFile = async (file: ApiFile | null) => {

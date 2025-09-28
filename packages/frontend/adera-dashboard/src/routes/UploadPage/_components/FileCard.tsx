@@ -15,7 +15,7 @@ import {
   LoaderIcon
 } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
-import { ApiFileAnalysis } from 'store/_types';
+import { ApiFileAnalysisList } from 'store/_types';
 import { formatDate } from 'utils/formatDate';
 import { getWordForm } from 'utils/getWordForm';
 
@@ -25,7 +25,7 @@ export const FileCard = ({
   objectKeyUrl,
   id,
   loading
-}: { loading?: boolean } & ApiFileAnalysis) => {
+}: { loading?: boolean } & ApiFileAnalysisList) => {
   const [downloadLoading, setDownloadLoading] = useState(false);
 
   const navigate = useNavigate();
