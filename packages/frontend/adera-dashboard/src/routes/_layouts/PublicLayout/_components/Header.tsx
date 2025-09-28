@@ -9,7 +9,7 @@ export const Header = () => {
       <nav {...stylex.props(styles.nav)}>
         <Logo />
         <Tab to="/">Общая аналитика</Tab>
-        <Tab>Загруженные данные</Tab>
+        <Tab to="/upload">Загруженные данные</Tab>
       </nav>
     </header>
   );

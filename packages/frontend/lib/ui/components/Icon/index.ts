@@ -1,4 +1,5 @@
-import ArrowsRightIcon from './_icons/arrow-right.svg?react';
+import ArrowLeftIconL from './_icons/arrow-left-l.svg?react';
+import ArrowRightIcon from './_icons/arrow-right.svg?react';
 import ArrowsSortIconM from './_icons/arrows-sort-m.svg?react';
 import ArrowsSortIconS from './_icons/arrows-sort-s.svg?react';
 import ChevronDownIcon from './_icons/chevron-down.svg?react';
@@ -20,7 +21,8 @@ import UploadIcon from './_icons/upload.svg?react';
 import XIcon from './_icons/x.svg?react';
 
 export {
-  ArrowsRightIcon,
+  ArrowLeftIconL,
+  ArrowRightIcon,
   ArrowsSortIconM,
   ArrowsSortIconS,
   ChevronDownIcon,

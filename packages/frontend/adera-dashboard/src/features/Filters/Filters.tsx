@@ -1,6 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
-import { Button, ButtonVariant, Flex } from '@adera/ui';
+import { Flex } from '@adera/ui';
 import { ModalFilter } from './_components/ModalFilter';
+import { PeriodFilter } from './_components/PeriodFilter';
 import { useDirectoryOptions } from './useDirectoryOptions';
 import { useFilters } from './useFilters';
 
@@ -29,10 +30,13 @@ export const Filters = () => {
           updateFilters({ sources: filter });
         }}
       />
-
-      <Button variant={ButtonVariant.ghost} aria-selected={true}>
-        Период: Год
-      </Button>
+      <PeriodFilter
+        to={filters.to}
+        from={filters.from}
+        onFilterUpdate={(filter) => {
+          updateFilters({ ...filter });
+        }}
+      />
     </Flex>
   );
 };

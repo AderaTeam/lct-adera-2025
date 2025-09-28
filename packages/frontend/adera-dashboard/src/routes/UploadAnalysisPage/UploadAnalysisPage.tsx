@@ -1,13 +1,10 @@
 import * as stylex from '@stylexjs/stylex';
-import { Container, Flex, Grid, headers } from '@adera/ui';
+import { NavLink } from 'react-router-dom';
+import { ArrowLeftIconL, Container, Flex, Grid, headers } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Filters } from 'features/Filters';
 import { Tonality } from 'features/Tonality';
 import { TopReviews } from 'features/TopReviews';
-import { AnomalyPeriods } from './_components/AnomalyPeriods';
-import { DynamicsNumber } from './_components/DynamicsNumber';
-import { DynamicsTonality } from './_components/DynamicsTonality';
-import { MostReviews } from './_components/MostReviews';
 
 const data = {
   topics: [
@@ -24,14 +21,20 @@ const data = {
   }
 };
 
-export const AnalyticsPage = () => {
+export const UploadAnalysisPage = () => {
   return (
     <main>
       <Container style={styles.root}>
         <Flex justify="space-between">
-          <h1 {...stylex.props(headers.h1Semibold)}>Общая аналитика</h1>
+          <Flex gap={12}>
+            <NavLink to={'/upload'}>
+              <ArrowLeftIconL color={colors.textBlueDefault} />
+            </NavLink>
+            <h1 {...stylex.props(headers.h1Semibold)}>Данные от 05.10.25 (3)</h1>
+          </Flex>
           <Filters />
         </Flex>
+
         <Grid gap={20} rowGap={20}>
           <Tonality
             positiveCount={data.counts.positiveCount}
@@ -39,10 +42,6 @@ export const AnalyticsPage = () => {
             negativeCount={data.counts.negativeCount}
           />
           <TopReviews topics={data.topics} />
-          <DynamicsTonality />
-          <AnomalyPeriods />
-          <DynamicsNumber />
-          <MostReviews />
         </Grid>
       </Container>
     </main>

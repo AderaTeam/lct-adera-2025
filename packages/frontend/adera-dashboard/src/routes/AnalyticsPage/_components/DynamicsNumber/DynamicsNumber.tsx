@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as stylex from '@stylexjs/stylex';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
 import { Flex, Grid, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
@@ -37,6 +37,10 @@ const data = [
     uv: 100
   }
 ];
+
+interface CustomPayload {
+  value: number;
+}
 
 export const DynamicsNumber = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -87,8 +91,10 @@ export const DynamicsNumber = () => {
             />
             <YAxis tick={(props) => <CustomYTick {...props} />} tickMargin={16} stroke="#F1F1F11A" />
             <Tooltip
-              content={(props) => (
-                <CustomTooltip>{!!(props.payload.length && props.active) && props.payload[0].value}</CustomTooltip>
+              content={(props: TooltipProps<number, string> & { payload?: CustomPayload[] }) => (
+                <CustomTooltip>
+                  {!!(!!props.payload && props.payload.length && props.active) && props.payload[0].value}
+                </CustomTooltip>
               )}
               cursor={{
                 stroke: colors.blue80,

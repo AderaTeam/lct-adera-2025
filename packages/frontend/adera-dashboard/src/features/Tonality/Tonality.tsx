@@ -4,7 +4,7 @@ import { Grid, headers, MessageIconM, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
 import { calcPercents } from 'utils/calcPercents';
-import { NegativeIcon, NeutralIcon, PositiveIcon } from '../../_icons';
+import { NegativeIcon, NeutralIcon, PositiveIcon } from './_icons';
 
 export const Tonality = ({
   positiveCount,
