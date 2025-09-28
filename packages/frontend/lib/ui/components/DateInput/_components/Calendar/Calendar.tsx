@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import * as stylex from '@stylexjs/stylex';
 import { colors } from '../../../../tokens.stylex';
 import { text } from '../../../../utils/text';
+import { ChevronRightIcon } from '../../../Icon';
 import { IconButton, IconButtonVariant } from '../../../IconButton';
 
 const months = [
@@ -195,7 +196,7 @@ export const Calendar = ({ selectedDate, onDateSelect, minDate, maxDate }: Calen
       </div>
       <div {...stylex.props(styles.header)}>
         <IconButton onClick={handlePrevious} type="button" size={'sm'} variant={IconButtonVariant.ghost}>
-          left!
+          <ChevronRightIcon {...stylex.props(styles.left)} />
         </IconButton>
         {viewMode === 'day' && (
           <Fragment>
@@ -230,7 +231,7 @@ export const Calendar = ({ selectedDate, onDateSelect, minDate, maxDate }: Calen
           </span>
         )}
         <IconButton onClick={handleNext} type="button" size={'sm'} variant={IconButtonVariant.ghost}>
-          {/* <ChevronRightIconM /> */}
+          <ChevronRightIcon />
         </IconButton>
       </div>
       <div {...stylex.props(styles.body)}>
@@ -255,7 +256,7 @@ export const Calendar = ({ selectedDate, onDateSelect, minDate, maxDate }: Calen
 
 const styles = stylex.create({
   root: {
-    background: 'white',
+    background: colors.backgroundPrimary,
     borderRadius: 16,
     display: 'flex',
     flexDirection: 'column',
@@ -363,9 +364,9 @@ const styles = stylex.create({
     borderStyle: 'solid',
     borderWidth: 1,
     color: {
-      default: colors.black100,
-      ':not(:disabled):hover': 'white',
-      ':is([aria-selected=true])': 'white',
+      default: colors.textPrimaryDefault,
+      ':not(:disabled):hover': colors.textPrimaryHover,
+      ':is([aria-selected=true])': colors.textPrimaryActive,
       ':disabled': colors.black40
     },
     cursor: { default: 'pointer', ':disabled': 'unset' },
@@ -387,10 +388,10 @@ const styles = stylex.create({
   card: (width: number) => ({
     gridColumn: `span ${width.toString()}`,
     color: {
-      default: colors.black100,
-      ':not(:is([aria-disabled=true])):hover': 'white',
-      ':is([aria-selected=true])': 'white',
-      ':is([aria-disabled=true])': colors.black40
+      default: colors.textPrimaryDefault,
+      ':not(:disabled):hover': colors.textPrimaryHover,
+      ':is([aria-selected=true])': colors.textPrimaryActive,
+      ':disabled': colors.black40
     },
     backgroundColor: {
       default: 'transparent',
@@ -404,5 +405,8 @@ const styles = stylex.create({
     borderRadius: 10,
     transition: 'all 0.2s',
     cursor: 'pointer'
-  })
+  }),
+  left: {
+    transform: 'rotate(-180deg)'
+  }
 });

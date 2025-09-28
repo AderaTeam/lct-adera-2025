@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as stylex from '@stylexjs/stylex';
 import { useUncontrolled } from '../../hooks/useUncontrolled';
-import { IconButton } from '../IconButton';
+import { ChevronRightIcon, XIcon } from '../Icon';
 import { InputBaseProps, InputBase } from '../InputBase';
 import { Calendar } from './_components/Calendar';
 import { Popover } from './_components/Popover';
@@ -53,19 +53,26 @@ export const DateInput = ({
     <Popover onOpenChange={setOpen} open={open}>
       <Popover.Target asChild>
         <InputBase
-          placeholder={placeholder ?? '__/__/____'}
+          placeholder={placeholder ?? '__.__.____'}
           value={_value ? _value.toLocaleDateString() : ''}
           readOnly
           disabled={disabled}
           rightSection={
-            <IconButton
-              disabled={disabled}
-              onClick={() => {
-                setOpen(true);
-              }}
-              size={'sm'}>
-              {/* <CalendarIconS /> */}
-            </IconButton>
+            !_value ? (
+              <ChevronRightIcon
+                {...stylex.props(styles.icon)}
+                onClick={() => {
+                  setOpen(true);
+                }}
+              />
+            ) : (
+              <XIcon
+                {...stylex.props(styles.icon)}
+                onClick={() => {
+                  setValue(null);
+                }}
+              />
+            )
           }
           {...props}
         />
@@ -80,5 +87,8 @@ export const DateInput = ({
 const styles = stylex.create({
   dropdown: {
     borderRadius: 16
+  },
+  icon: {
+    cursor: 'pointer'
   }
 });

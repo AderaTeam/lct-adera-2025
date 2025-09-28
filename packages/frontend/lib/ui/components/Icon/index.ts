@@ -2,6 +2,7 @@ import ArrowsRightIcon from './_icons/arrow-right.svg?react';
 import ArrowsSortIconM from './_icons/arrows-sort-m.svg?react';
 import ArrowsSortIconS from './_icons/arrows-sort-s.svg?react';
 import ChevronDownIcon from './_icons/chevron-down.svg?react';
+import ChevronRightIcon from './_icons/chevron-right.svg?react';
 import CircleCheckFilledIcon from './_icons/circle-check-filled.svg?react';
 import DownloadIcon from './_icons/download.svg?react';
 import ExportIcon from './_icons/export.svg?react';
@@ -23,6 +24,7 @@ export {
   ArrowsSortIconM,
   ArrowsSortIconS,
   ChevronDownIcon,
+  ChevronRightIcon,
   CircleCheckFilledIcon,
   DownloadIcon,
   ExportIcon,
