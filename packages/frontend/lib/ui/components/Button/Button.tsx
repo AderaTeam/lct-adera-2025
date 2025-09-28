@@ -71,7 +71,7 @@ const styles = stylex.create({
       default: colors.buttonPrimaryDefault,
       ':not(:disabled):hover': colors.buttonPrimaryHover,
       ':not(:disabled):active': colors.buttonPrimaryActive,
-      ':disabled': colors.backgroundSecondary
+      ':disabled': '#22222E'
     },
     color: {
       default: 'white',
@@ -84,7 +84,7 @@ const styles = stylex.create({
       ':not(:disabled):hover': colors.buttonSecondaryHover,
       ':not(:disabled):active': colors.buttonSecondaryActive,
       ':is([aria-selected=true])': colors.buttonSecondaryActive,
-      ':disabled': colors.backgroundSecondary
+      ':disabled': '#22222E'
     },
     color: {
       default: colors.textPrimaryDefault,
@@ -100,7 +100,7 @@ const styles = stylex.create({
       ':not(:disabled):hover': 'rgba(90, 128, 255, 0.35)',
       ':not(:disabled):active': 'rgba(90, 128, 255, 0.1)',
       ':is([aria-selected=true])': 'rgba(90, 128, 255, 0.1)',
-      ':disabled': colors.backgroundSecondary
+      ':disabled': '#22222E'
     },
     color: {
       default: colors.textPrimaryDefault,
