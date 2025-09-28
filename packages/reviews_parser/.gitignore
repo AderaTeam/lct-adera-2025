@@ -218,3 +218,4 @@ __marimo__/
 .venv
 kafka_consumers_config.json
 kafka_producer_config.json
+parser_config.json
