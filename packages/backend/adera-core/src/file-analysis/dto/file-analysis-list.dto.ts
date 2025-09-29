@@ -1,5 +1,5 @@
 export class FileAnalysisListDto {
-  id: string;
+  id: number;
   objectKeyUrl: string;
   createdAt: string;
   reviewsCount: number;
