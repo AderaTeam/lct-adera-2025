@@ -1,4 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useAuthFetch } from '@adera/auth-fetch';
 import { Container, Flex, Grid, headers } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Filters } from 'features/Filters';
@@ -25,6 +27,12 @@ const data = {
 };
 
 export const AnalyticsPage = () => {
+  const authFetch = useAuthFetch();
+  const { data: dashboard } = useSuspenseQuery({
+    queryKey: ['analytics-dashboard'],
+    queryFn: () => authFetch('/analytics/dashboard')
+  });
+
   return (
     <main>
       <Container style={styles.root}>
@@ -34,9 +42,9 @@ export const AnalyticsPage = () => {
         </Flex>
         <Grid gap={20} rowGap={20}>
           <Tonality
-            positiveCount={data.counts.positiveCount}
-            neutralCount={data.counts.neutralCount}
-            negativeCount={data.counts.negativeCount}
+            positiveCount={dashboard.summary.positiveCount}
+            neutralCount={dashboard.summary.neutralCount}
+            negativeCount={dashboard.summary.negativeCount}
           />
           <TopReviews topics={data.topics} />
           <DynamicsTonality />
