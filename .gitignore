@@ -30,3 +30,5 @@ yarn-error.log*
 
 # current node version for fnm (Windows)
 .node-version
+data
+.venv
