@@ -52,19 +52,19 @@ CREATE USER producer WITH PASSWORD '${PRODUCER_PASSWORD}';
 CREATE USER admin WITH PASSWORD '${ADMIN_PASSWORD}';
 
 -- Назначение прав пользователю Consumer (только SELECT)
-GRANT CONNECT ON DATABASE review_db TO consumer;
+GRANT CONNECT ON DATABASE postgres TO consumer;
 GRANT USAGE ON SCHEMA public TO consumer;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO consumer;
 GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO consumer;
 
 -- Назначение прав пользователю Producer (SELECT, INSERT, UPDATE)
-GRANT CONNECT ON DATABASE review_db TO producer;
+GRANT CONNECT ON DATABASE postgres TO producer;
 GRANT USAGE ON SCHEMA public TO producer;
 GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO producer;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO producer;
 
 -- Назначение прав пользователю Admin (все права)
-GRANT CONNECT ON DATABASE review_db TO admin;
-GRANT ALL PRIVILEGES ON DATABASE review_db TO admin;
+GRANT CONNECT ON DATABASE postgres TO admin;
+GRANT ALL PRIVILEGES ON DATABASE postgres TO admin;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin;
