@@ -95,7 +95,15 @@ def convert_to_json(df: pl.DataFrame) -> str:
         .group_by("id")
         .agg([
             pl.col("topic").alias("topics"),
-            pl.col("avg_sentiment").alias("sentiments")
+            pl.col("avg_sentiment").map_elements(
+            lambda a: 
+                    a if type(a) is str else ( 
+                    "позитивный" if  4 <= a else 
+                    "негативный" if a <= 2.5 else 
+                    "нейтральный"
+                ),
+            return_dtype=pl.String
+        ).alias("sentiments")
         ])
         .sort("id")
     )
