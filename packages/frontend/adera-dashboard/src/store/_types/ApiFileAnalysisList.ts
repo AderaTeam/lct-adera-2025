@@ -1,6 +1,6 @@
 export interface ApiFileAnalysisList {
-  id: string;
-  objectKeyUrl: string;
+  id: number;
+  objectKeyUrl: string | null;
   createdAt: string;
   reviewsCount: number;
 }

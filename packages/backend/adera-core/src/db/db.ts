@@ -11,6 +11,9 @@ export const DbTables = {
   Reviews: 'reviews',
   ReviewTopics: 'review_topics',
   Cities: 'cities',
+  FileAnalysis: 'file_analysis',
+  FileAnalysisPrediction: 'file_analysis_prediction',
+  FileAnalysisPredictionTopic: 'file_analysis_prediction_topic',
 };
 
 /**

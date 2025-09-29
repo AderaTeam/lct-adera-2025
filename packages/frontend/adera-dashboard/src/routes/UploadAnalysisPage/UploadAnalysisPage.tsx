@@ -10,21 +10,6 @@ import { TopReviews } from 'features/TopReviews';
 import { ApiFileAnalysisDetail } from 'store/_types';
 import { invariant } from 'utils/invariant';
 
-const data = {
-  topics: [
-    { name: 'Кредиты', positiveCount: 30, neutralCount: 20, negativeCount: 15 },
-    { name: 'Перевод', positiveCount: 90, neutralCount: 2, negativeCount: 78 },
-    { name: 'Мобильное приложение', positiveCount: 10, neutralCount: 20, negativeCount: 37 },
-    { name: 'Банкоматы', positiveCount: 70, neutralCount: 14, negativeCount: 36 },
-    { name: 'Обслуживание', positiveCount: 11, neutralCount: 20, negativeCount: 22 }
-  ],
-  counts: {
-    positiveCount: 211,
-    neutralCount: 66,
-    negativeCount: 208
-  }
-};
-
 export const UploadAnalysisPage = () => {
   const { id } = useParams();
   invariant(id);
@@ -43,18 +28,18 @@ export const UploadAnalysisPage = () => {
             <NavLink to={'/upload'}>
               <ArrowLeftIconL color={colors.textBlueDefault} />
             </NavLink>
-            <h1 {...stylex.props(headers.h1Semibold)}>Данные от 05.10.25 (3) {fileAnalysis.id}</h1>
+            <h1 {...stylex.props(headers.h1Semibold)}>Данные от 05.10.25 (3)</h1>
           </Flex>
           <Filters />
         </Flex>
 
         <Grid gap={20} rowGap={20}>
           <Tonality
-            positiveCount={data.counts.positiveCount}
-            neutralCount={data.counts.neutralCount}
-            negativeCount={data.counts.negativeCount}
+            positiveCount={fileAnalysis.summary.positive}
+            neutralCount={fileAnalysis.summary.neutral}
+            negativeCount={fileAnalysis.summary.negative}
           />
-          <TopReviews topics={data.topics} />
+          <TopReviews topics={fileAnalysis.topics} />
         </Grid>
       </Container>
     </main>
