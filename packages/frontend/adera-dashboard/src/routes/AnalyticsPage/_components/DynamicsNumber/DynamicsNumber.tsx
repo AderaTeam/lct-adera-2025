@@ -7,42 +7,18 @@ import { Card } from 'components/Card';
 import { CustomXTick, CustomYTick } from '../CustomTick';
 import { CustomTooltip } from '../CustomTooltip';
 
-const data = [
-  {
-    name: 'Page A',
-    uv: 10
-  },
-  {
-    name: 'Page B',
-    uv: 20
-  },
-  {
-    name: 'Page C',
-    uv: 60
-  },
-  {
-    name: 'Page D',
-    uv: 80
-  },
-  {
-    name: 'Page E',
-    uv: 20
-  },
-  {
-    name: 'Page F',
-    uv: 40
-  },
-  {
-    name: 'Page G',
-    uv: 100
-  }
-];
-
 interface CustomPayload {
   value: number;
 }
 
-export const DynamicsNumber = () => {
+export const DynamicsNumber = ({
+  dynamics = []
+}: {
+  dynamics: {
+    name: string;
+    count: number;
+  }[];
+}) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
@@ -61,7 +37,7 @@ export const DynamicsNumber = () => {
             onMouseLeave={() => {
               setActiveIndex(null);
             }}
-            data={data}
+            data={dynamics}
             margin={{
               top: 5,
               right: 5,
@@ -69,7 +45,7 @@ export const DynamicsNumber = () => {
               bottom: 0
             }}>
             <defs>
-              <linearGradient id="uvGradient" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="countGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={colors.blue80} stopOpacity={0.3} />
                 <stop offset="100%" stopColor="#47FFD4" stopOpacity={0} />
               </linearGradient>
@@ -106,10 +82,10 @@ export const DynamicsNumber = () => {
               style={{ outline: 'none' }}
               tabIndex={-1}
               type="linear"
-              dataKey="uv"
+              dataKey="count"
               strokeWidth={3}
               stroke={colors.blue80}
-              fill="url(#uvGradient)"
+              fill="url(#countGradient)"
             />
           </AreaChart>
         </ResponsiveContainer>

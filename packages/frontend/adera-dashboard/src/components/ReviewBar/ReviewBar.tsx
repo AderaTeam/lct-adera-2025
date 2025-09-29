@@ -2,16 +2,8 @@ import * as stylex from '@stylexjs/stylex';
 import { colors } from '@adera/ui/tokens.stylex';
 import { calcPercents } from 'utils/calcPercents';
 
-export const ReviewBar = ({
-  positiveCount,
-  neutralCount,
-  negativeCount
-}: {
-  positiveCount: number;
-  neutralCount: number;
-  negativeCount: number;
-}) => {
-  const [positivePercent, neutralPercent, negativePercent] = calcPercents([positiveCount, neutralCount, negativeCount]);
+export const ReviewBar = ({ positive, neutral, negative }: { positive: number; neutral: number; negative: number }) => {
+  const [positivePercent, neutralPercent, negativePercent] = calcPercents([positive, neutral, negative]);
 
   return (
     <div {...stylex.props(styles.root)}>

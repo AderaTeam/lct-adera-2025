@@ -11,9 +11,9 @@ export const TopReviews = ({
 }: {
   topics: {
     name: string;
-    positiveCount: number;
-    neutralCount: number;
-    negativeCount: number;
+    positive: number;
+    neutral: number;
+    negative: number;
   }[];
 }) => {
   const { filters, updateFilters } = useFilters();
@@ -26,9 +26,7 @@ export const TopReviews = ({
     });
   };
 
-  const _topics = topics.sort((a, b) =>
-    isPositiveTop ? b.positiveCount - a.positiveCount : b.negativeCount - a.negativeCount
-  );
+  const _topics = topics.sort((a, b) => (isPositiveTop ? b.positive - a.positive : b.negative - a.negative));
 
   return (
     <Grid.Col span={3}>
@@ -72,18 +70,18 @@ export const TopReviews = ({
                     <div {...stylex.props(styles.index)}>{index + 1}</div>
                     <div {...stylex.props(styles.name)}>{t.name}</div>
                     <div {...stylex.props(styles.block(100), text.subheaderBold)}>
-                      <MessageIconS /> {t.positiveCount + t.neutralCount + t.negativeCount}:
+                      <MessageIconS /> {t.positive + t.neutral + t.negative}:
                     </div>
                     <div {...stylex.props(styles.block(80))}>
-                      <div {...stylex.props(styles.circle(colors.statusSuccess))} /> {t.positiveCount}
+                      <div {...stylex.props(styles.circle(colors.statusSuccess))} /> {t.positive}
                     </div>
                     <div {...stylex.props(styles.block(80))}>
                       <div {...stylex.props(styles.circle(colors.statusNeutral))} />
-                      {t.neutralCount}
+                      {t.neutral}
                     </div>
                     <div {...stylex.props(styles.block(80))}>
                       <div {...stylex.props(styles.circle(colors.statusError))} />
-                      {t.negativeCount}
+                      {t.negative}
                     </div>
                   </li>
                 ))}
@@ -100,7 +98,7 @@ export const TopReviews = ({
                   <Flex justify="space-between" gap={8} style={text.defaultMedium}>
                     {t.name}
                     <Flex style={styles.count} gap={4}>
-                      {isPositiveTop ? t.positiveCount : t.negativeCount}
+                      {isPositiveTop ? t.positive : t.negative}
                       <div
                         {...stylex.props(
                           styles.circle(isPositiveTop ? colors.statusSuccess : colors.statusError)
