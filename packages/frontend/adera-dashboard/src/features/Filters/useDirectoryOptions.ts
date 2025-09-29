@@ -20,10 +20,15 @@ const mapToOptions = <T extends { id: number; name: string }>(data?: T[]) => {
 
 export const useDirectoryOptions = () => {
   const { data: sources } = useDirectoryQuery<{ id: number; name: string }[]>('sources');
-  const { data: products } = useDirectoryQuery<{ id: number; name: string }[]>('products');
+  const { data: topics } = useDirectoryQuery<{ id: number; name: string }[]>('topics');
+  const { data: reviewsDateRange } = useDirectoryQuery<{
+    minDate: string | null;
+    maxDate: string | null;
+  }>('reviews-date-range');
 
   return {
     sourceOptions: mapToOptions(sources),
-    productOptions: mapToOptions(products)
+    topicOptions: mapToOptions(topics),
+    reviewsDateRangeOptions: reviewsDateRange
   };
 };

@@ -14,10 +14,18 @@ export class DirectoriesController {
   }
 
   /**
-   * GET, Получение продуктов
+   * GET, Получение топиков
    */
-  @Get('/products')
+  @Get('/topics')
   async findProducts() {
-    return this.directoriesService.findProducts();
+    return this.directoriesService.findTopics();
+  }
+
+  /**
+   * GET, Получение минимальной и максимальной возможной даты отзыва
+   */
+  @Get('reviews-date-range')
+  async getReviewsDateRange() {
+    return this.directoriesService.getReviewsDateRange();
   }
 }

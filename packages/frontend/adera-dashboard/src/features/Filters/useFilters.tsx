@@ -5,7 +5,7 @@ import { SortDirections } from 'store/_types';
 export interface FiltersState {
   sort_review_top: SortDirections;
   sources: string;
-  products: string;
+  topics: string;
   from: string;
   to: string;
 }
@@ -13,7 +13,7 @@ export interface FiltersState {
 export const DEFAULT_FILTERS: FiltersState = {
   sort_review_top: SortDirections.asc,
   sources: 'all',
-  products: 'all',
+  topics: 'all',
   to: '',
   from: ''
 };
@@ -26,7 +26,7 @@ export function parseFilters(params: URLSearchParams): FiltersState {
   return {
     sort_review_top: parseSortDirection(params.get('sort_review_top'), DEFAULT_FILTERS.sort_review_top),
     sources: params.get('sources') ?? DEFAULT_FILTERS.sources,
-    products: params.get('products') ?? DEFAULT_FILTERS.products,
+    topics: params.get('topics') ?? DEFAULT_FILTERS.topics,
     to: params.get('to') ?? DEFAULT_FILTERS.to,
     from: params.get('from') ?? DEFAULT_FILTERS.from
   };

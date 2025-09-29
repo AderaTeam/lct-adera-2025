@@ -1,30 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { ApiDirectory } from 'src/common/dto';
 import { db, DbTables } from 'src/db/db';
+import { getUTCTime } from 'src/db/getUTCTime';
 
 @Injectable()
 export class DirectoriesService {
   constructor() {}
 
   async findSources(): Promise<ApiDirectory[]> {
-    return await db(DbTables.Sources).select('*');
+    const sources = await db(DbTables.Sources).select<
+      { source_id: number; source_name: string }[]
+    >('*');
+
+    return sources.map((s) => ({ id: s.source_id, name: s.source_name }));
   }
 
-  async findProducts(): Promise<ApiDirectory[]> {
-    return [
-      { name: 'Счет', id: 1 },
-      { name: 'Мобильное приложение', id: 2 },
-      { name: 'Ипотека', id: 3 },
-      { name: 'Дебетовые карты', id: 4 },
-      { name: 'online сервис', id: 5 },
-      { name: 'Банковские сейфы', id: 6 },
-      { name: 'Денежные переводы', id: 7 },
-      { name: 'Депозитарные услуги', id: 8 },
-      { name: 'Мобильное приложение2', id: 9 },
-      { name: 'Инвестиции и брокерское обслуживание', id: 10 },
-      { name: 'Обмен валют', id: 11 },
-      { name: 'Погашение кредита', id: 12 },
-      { name: 'Кредитный карты', id: 13 },
-    ];
+  async findTopics(): Promise<ApiDirectory[]> {
+    const topics = await db(DbTables.Topics).select<
+      { topic_id: number; topic_name: string }[]
+    >('*');
+
+    return topics.map((t) => ({ id: t.topic_id, name: t.topic_name }));
+  }
+
+  async getReviewsDateRange(): Promise<{
+    minDate: string | null;
+    maxDate: string | null;
+  }> {
+    const result = await db
+      .select(
+        db.raw(
+          `(MIN(review_date) - interval '1 day')::timestamptz as "minDate"`,
+        ),
+        db.raw(
+          `(MAX(review_date) + interval '1 day')::timestamptz as "maxDate"`,
+        ),
+      )
+      .from(DbTables.Reviews)
+      .first<{ minDate: string; maxDate: string }>();
+
+    return {
+      minDate: result?.maxDate
+        ? getUTCTime(result.minDate).toISOString()
+        : null,
+      maxDate: result?.maxDate
+        ? getUTCTime(result.maxDate).toISOString()
+        : null,
+    };
   }
 }

@@ -19,19 +19,33 @@ import { colors } from '@adera/ui/tokens.stylex';
 
 const MIN_PERIOD_MS = 7 * 24 * 60 * 60 * 1000; // 7 дней
 
+const shiftDateString = (dateStr: string, days: number): string => {
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() + days);
+  return d.toISOString();
+};
+
 export const PeriodFilter = ({
   to,
   from,
-  onFilterUpdate
+  onFilterUpdate,
+  maxDate,
+  minDate
 }: {
   to: string;
   from: string;
   onFilterUpdate: (value: { to: string; from: string }) => void;
+  minDate: string | null;
+  maxDate: string | null;
 }) => {
   const [open, setOpen] = useState(false);
 
-  const [_to, setTo] = useState(to);
-  const [_from, setFrom] = useState(from);
+  const defaultFrom = from || (minDate ? shiftDateString(minDate, 1) : '');
+  const defaultTo = to || (maxDate ? shiftDateString(maxDate, 0) : '');
+
+  const [_from, setFrom] = useState(defaultFrom);
+
+  const [_to, setTo] = useState(defaultTo);
 
   const { showToast, clearToasts } = useToast();
 
@@ -41,7 +55,6 @@ export const PeriodFilter = ({
   };
 
   const handleApplyFilters = (from: string, to: string) => {
-    console.log(from, to);
     if (!from && !to) {
       onFilterUpdate({ from, to });
       setOpen(false);
@@ -66,8 +79,8 @@ export const PeriodFilter = ({
   };
 
   const handleCancel = () => {
-    setFrom(from);
-    setTo(to);
+    setFrom(defaultFrom);
+    setTo(defaultTo);
   };
 
   return (
@@ -100,6 +113,7 @@ export const PeriodFilter = ({
               <DateInput
                 value={_from}
                 maxDate={_to}
+                minDate={minDate}
                 onChange={(e) => {
                   setFrom(e?.toISOString() ?? '');
                 }}
@@ -110,6 +124,7 @@ export const PeriodFilter = ({
               <DateInput
                 value={_to}
                 minDate={_from}
+                maxDate={maxDate}
                 onChange={(e) => {
                   setTo(e?.toISOString() ?? '');
                 }}
