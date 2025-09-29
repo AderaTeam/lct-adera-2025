@@ -6,7 +6,7 @@ export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 
   /**
-   * GET, Получение списка проведенных анализов
+   * GET, Получение данных о дашборде
    */
   @Get('dashboard')
   async getDashboard() {
