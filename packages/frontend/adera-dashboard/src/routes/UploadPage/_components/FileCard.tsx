@@ -82,19 +82,20 @@ export const FileCard = ({
           </Flex>
         </Stack>
         <Flex gap={16}>
+          {!!objectKeyUrl && (
+            <Button
+              disabled={loading}
+              loading={downloadLoading}
+              onClick={() => {
+                void handleDownload(objectKeyUrl);
+              }}
+              variant={ButtonVariant.tertiaryAccent}>
+              Скачать .json <DownloadIcon />
+            </Button>
+          )}
           <Button
-            disabled={loading}
-            loading={downloadLoading}
             onClick={() => {
-              void handleDownload(objectKeyUrl);
-            }}
-            variant={ButtonVariant.tertiaryAccent}>
-            Скачать .json <DownloadIcon />
-          </Button>
-
-          <Button
-            onClick={() => {
-              void navigate(`/upload/${id}`);
+              void navigate(`/upload/${id.toString()}`);
             }}
             disabled={loading}>
             Смотреть аналитику <ArrowRightIcon />

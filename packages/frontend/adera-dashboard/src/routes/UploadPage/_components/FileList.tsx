@@ -43,7 +43,7 @@ export const FileList = ({
     <Grid gap={16} rowGap={20}>
       {!showSkeleton && isNewFileCreating && (
         <Grid.Col span={9} style={styles.item}>
-          <FileCard loading={true} id="" objectKeyUrl={''} createdAt={''} reviewsCount={0} />
+          <FileCard loading={true} id={0} objectKeyUrl={''} createdAt={''} reviewsCount={0} />
         </Grid.Col>
       )}
       {showSkeleton
