@@ -1,5 +1,6 @@
 export interface ApiFileAnalysisDetail {
   id: string;
+  createdAt: string;
   summary: {
     positive: number;
     neutral: number;

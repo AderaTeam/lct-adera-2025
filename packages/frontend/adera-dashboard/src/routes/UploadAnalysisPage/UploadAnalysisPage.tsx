@@ -8,6 +8,7 @@ import { Filters } from 'features/Filters';
 import { Tonality } from 'features/Tonality';
 import { TopReviews } from 'features/TopReviews';
 import { ApiFileAnalysisDetail } from 'store/_types';
+import { formatDate } from 'utils/formatDate';
 import { invariant } from 'utils/invariant';
 
 export const UploadAnalysisPage = () => {
@@ -28,7 +29,9 @@ export const UploadAnalysisPage = () => {
             <NavLink to={'/upload'}>
               <ArrowLeftIconL color={colors.textBlueDefault} />
             </NavLink>
-            <h1 {...stylex.props(headers.h1Semibold)}>Данные от 05.10.25 (3)</h1>
+            <h1 {...stylex.props(headers.h1Semibold)}>
+              Данные от {formatDate(fileAnalysis.createdAt, { showTime: true })}
+            </h1>
           </Flex>
           <Filters />
         </Flex>
