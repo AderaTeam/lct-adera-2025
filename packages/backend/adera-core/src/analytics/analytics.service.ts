@@ -28,11 +28,14 @@ export class AnalyticsService {
   constructor() {}
 
   async getDashboard() {
-    const [summary, topics, dynamics, toneDynamics] = await Promise.all([
+    const [summary, topics, dynamics, toneDynamics, avgReviews, maxReviewsData, anomalies] = await Promise.all([
       this.getToneSummary(),
       this.getTopicsStats(),
       this.getDynamics(),
       this.getToneDynamics(),
+      this.getAvgReviews(),
+      this.getMaxReviews(),
+      this.getAnomalies(),
     ]);
 
     return {
@@ -40,6 +43,9 @@ export class AnalyticsService {
       topics,
       dynamics,
       toneDynamics,
+      avgReviews,
+      maxReviewsData,
+      anomalies
     };
   }
 
@@ -235,18 +241,45 @@ export class AnalyticsService {
           (d) => d.review_date >= p.start && d.review_date <= p.end,
         );
         counts.forEach((c) => {
-          switch (c.mood) {
-            case 'positive':
-              amounts.positive += c.count;
-            case 'negative':
-              amounts.negative += c.count;
-            case 'neutral':
-              amounts.neutral += c.count;
-          }
+          amounts[c.mood as 'positive' | 'negative' | 'neutral'] +=
+            c.count;
         });
         const name = `${format(p.start, 'dd.MM', { locale: ru })} - ${format(p.end, 'dd.MM')}`;
         return { name, ...amounts };
       });
     }
   }
+  private async getAvgReviews(
+    from?: string,
+    to?: string,
+  ){
+    const dynamics = await this.getDynamics(from, to);
+    const avg = dynamics.reduce((sum, obj) => sum += obj.count, 0)/dynamics.length
+    return Math.round(avg)
+  }
+
+  private async getMaxReviews(
+    from?: string,
+    to?: string,
+  ){
+    const dynamics = await this.getDynamics(from, to);
+    const max = dynamics.reduce((max, obj) => max > obj.count ? max : obj.count, 0)
+    const maxMonth = dynamics.find((obj) => obj.count == max)
+
+    return maxMonth
+  }
+
+  private async getAnomalies(
+    from?: string,
+    to?: string,
+  ){
+    const toneDynamics = await this.getToneDynamics(from, to)
+    const positiveAnomaly = toneDynamics.reduce((max, d) => max.positive > d.positive ? max : d)
+    const negativeAnomaly = toneDynamics.reduce((max, d) => max.negative > d.negative ? max : d)
+    return {
+      positive: {amount: positiveAnomaly.positive, name: positiveAnomaly.name},
+      negative: {amount: negativeAnomaly.negative, name: negativeAnomaly.name}
+    }
+  }
+
 }
