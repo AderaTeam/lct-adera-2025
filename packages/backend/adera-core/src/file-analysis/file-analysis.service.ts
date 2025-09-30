@@ -49,6 +49,18 @@ export class FileAnalysisService {
   }
 
   async findOne(id: string): Promise<FileAnalysisDetailDto> {
+    const fileAnalysis = await db(DbTables.FileAnalysis)
+      .select<{ id: number; created_at: string }[]>('id', 'created_at')
+      .where('id', id)
+      .first();
+
+    if (!fileAnalysis) {
+      throw new AppError({
+        statusCode: HttpStatus.NOT_FOUND,
+        errorText: 'Анализ не найден',
+      });
+    }
+
     // Получаем все темы и сентименты для файла
     const rows = await db(DbTables.FileAnalysisPredictionTopic)
       .select<{ topic: string; sentiment: string }[]>('topic', 'sentiment')
@@ -91,7 +103,8 @@ export class FileAnalysisService {
     );
 
     return {
-      id: Number(id),
+      id: fileAnalysis.id,
+      createdAt: fileAnalysis.created_at,
       summary,
       topics,
     };
