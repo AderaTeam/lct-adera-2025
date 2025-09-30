@@ -14,4 +14,10 @@ export interface ApiDashboard {
     name: string;
     count: number;
   }[];
+  toneDynamics: {
+    name: string;
+    positive: number;
+    negative: number;
+    neutral: number;
+  }[];
 }
