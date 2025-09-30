@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { db, DbTables } from 'src/db/db';
 import {
   DynamicsDto,
+  ToneDynamicsDto,
   ToneSummaryDto,
   TopicStatsDto,
 } from './dto/analytics.dto';
@@ -21,16 +22,18 @@ export class AnalyticsService {
   constructor() {}
 
   async getDashboard() {
-    const [summary, topics, dynamics] = await Promise.all([
+    const [summary, topics, dynamics, toneDynamics] = await Promise.all([
       this.getToneSummary(),
       this.getTopicsStats(),
       this.getDynamics(),
+      this.getToneDynamics(),
     ]);
 
     return {
       summary,
       topics,
       dynamics,
+      toneDynamics,
     };
   }
 
@@ -115,7 +118,7 @@ export class AnalyticsService {
     to?: string,
   ): Promise<DynamicsDto[]> {
     const rows = await db(DbTables.Reviews)
-      .select<{ review_date: Date; count: string }[]>('review_date')
+      .select<{ review_date: Date; count: string}[]>('review_date')
       .count('* as count')
       .groupBy('review_date')
       .orderBy('review_date');
@@ -147,6 +150,92 @@ export class AnalyticsService {
           .reduce((sum, d) => sum + d.count, 0);
         const name = `${format(p.start, 'dd.MM', { locale: ru })} - ${format(p.end, 'dd.MM')}`;
         return { name, count };
+      });
+    }
+  }
+
+  private async getToneDynamics(
+    from?: string,
+    to?: string,
+  ): Promise<ToneDynamicsDto[]> {
+      type RawMoodDateStatsRow = {
+        review_date: string;
+        mood: string;
+        count: string;
+      };
+      const query = db({ rt: DbTables.ReviewTopics })
+      .select<
+        RawMoodDateStatsRow[]
+      >('r.review_date as reviewDate', 'rt.topic_mood as mood')
+      .count('* as count')
+      .join({ r: DbTables.Reviews }, 'rt.review_id', 'r.review_id')
+      .join({ t: DbTables.Topics }, 'rt.topic_id', 't.topic_id')
+      .groupBy('r.review_date', 'rt.topic_mood');
+
+    if (from && to) {
+      query.whereBetween('r.review_date', [from, to]);
+    }
+
+    const rows = await query;
+
+    let data: { 
+        review_date: Date;
+        mood: string;
+        count: number; 
+      }[] = rows.map((r) => ({
+      review_date: new Date(r.reviewDate),
+      mood: normalizeMood(r.mood.toString()),
+      count: Number(r.count)
+    }));
+
+    if (!from || !to) {
+      const monthMap: Record<number, {
+        positive: number;
+        negative: number;
+        neutral: number;
+      }> = {};
+      data.forEach((d) => {
+        const month = d.review_date.getMonth();
+        monthMap[month] = monthMap[month] || {
+        positive: 0,
+        negative: 0,
+        neutral: 0,
+      }
+        switch (d.mood){
+          case 'positive': monthMap[month].positive += d.count;
+          case 'negative': monthMap[month].negative += d.count;
+          case 'neutral': monthMap[month].neutral += d.count;
+        }
+      });
+
+      return Array.from({ length: 12 }, (_, i) => ({
+        name: format(new Date(0, i), 'LLLL', { locale: ru }), // Январь, Февраль
+        positive: monthMap[i] ? monthMap[i].positive : 0,
+        negative: monthMap[i] ? monthMap[i].negative : 0,
+        neutral: monthMap[i] ? monthMap[i].neutral : 0,
+      })).filter((m) => Boolean(m.negative && m.positive && m.neutral));;
+    } else {
+      const start = new Date(from);
+      const end = new Date(to);
+      const periods = splitPeriods(start, end);
+
+      return periods.map((p) => {
+        let amounts = {
+          positive: 0,
+          negative: 0,
+          neutral: 0,
+        }
+        const counts = data
+          .filter((d) => d.review_date >= p.start && d.review_date <= p.end);
+        counts.forEach((c) => {
+          switch (c.mood){
+            case 'positive': amounts.positive += c.count;
+            case 'negative': amounts.negative += c.count;
+            case 'neutral': amounts.neutral += c.count;
+          }
+        })
+        const name = `${format(p.start, 'dd.MM', { locale: ru })} - ${format(p.end, 'dd.MM')}`;
+        return { name, ...amounts };
       });
     }
   }
