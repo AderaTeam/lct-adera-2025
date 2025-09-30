@@ -33,7 +33,7 @@ export const AnalyticsPage = () => {
             negativeCount={dashboard.summary.negative}
           />
           <TopReviews topics={dashboard.topics} />
-          <DynamicsTonality />
+          <DynamicsTonality dynamics={dashboard.toneDynamics} />
           <AnomalyPeriods />
           <DynamicsNumber dynamics={dashboard.dynamics} />
           <MostReviews />

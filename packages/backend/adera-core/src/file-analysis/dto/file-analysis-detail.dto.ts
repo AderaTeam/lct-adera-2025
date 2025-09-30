@@ -1,5 +1,6 @@
 export class FileAnalysisDetailDto {
   id: number;
+  createdAt: string;
   summary: ToneSummaryDto;
   topics: TopicStatsDto[];
 }
