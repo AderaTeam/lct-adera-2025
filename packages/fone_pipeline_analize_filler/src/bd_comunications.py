@@ -148,9 +148,9 @@ def populate_review_topics_from_polars(df):
             topic_id = topic_mapping[review_topic]
             review_topics_data.append((
                 review_id, topic_id, (
-                    "positive" if  4 <= review_sentiment else 
-                    "negative" if review_sentiment <= 2.5 else 
-                    "neutral"
+                    "положительно" if  4 <= review_sentiment else 
+                    "негативно" if review_sentiment <= 2.5 else 
+                    "нейтрально"
                 )
             ))
             valid_review_ids.add(review_id)
