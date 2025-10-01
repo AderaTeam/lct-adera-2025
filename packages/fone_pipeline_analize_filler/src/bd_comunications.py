@@ -149,7 +149,7 @@ def populate_review_topics_from_polars(df):
             review_topics_data.append((
                 review_id, topic_id, (
                     "положительно" if  4 <= review_sentiment else 
-                    "негативно" if review_sentiment <= 2.5 else 
+                    "отрицательно" if review_sentiment <= 2.5 else 
                     "нейтрально"
                 )
             ))
