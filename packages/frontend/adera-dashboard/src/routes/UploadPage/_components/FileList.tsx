@@ -32,7 +32,7 @@ export const FileList = ({
     };
   }, [loading]);
 
-  if (files.length === 0 && !showSkeleton)
+  if (files.length === 0 && !showSkeleton && !isNewFileCreating)
     return (
       <div {...stylex.props(styles.nothingFound, text.defaultRegular)}>
         Здесь еще ничего нет. Загрузите данные по комментариям, чтобы посмотреть аналитику
