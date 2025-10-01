@@ -15,9 +15,9 @@ import { AnalyzeBodyDto } from './dto/analyze-body.dto';
 import { db, DbTables } from 'src/db/db';
 
 const moodMap: Record<string, keyof ToneSummaryDto> = {
-  позитивный: 'positive',
-  негативный: 'negative',
-  нейтральный: 'neutral',
+  положительно: 'positive',
+  отрицательно: 'negative',
+  нейтрально: 'neutral',
 };
 
 @Injectable()

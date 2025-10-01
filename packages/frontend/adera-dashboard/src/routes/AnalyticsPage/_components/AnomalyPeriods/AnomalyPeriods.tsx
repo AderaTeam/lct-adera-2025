@@ -45,7 +45,7 @@ export const AnomalyPeriods = ({
               </div>
               <Stack gap={2}>
                 <div {...stylex.props(text.defaultBold, styles.countError)}>{anomalies.negative.amount} упоминаний</div>
-                <div {...stylex.props(text.defaultRegular)}>Самый негативный </div>
+                <div {...stylex.props(text.defaultRegular)}>Самый отрицательный </div>
               </Stack>
             </Stack>
 

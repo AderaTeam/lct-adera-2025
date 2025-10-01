@@ -36,7 +36,7 @@ export const Tonality = ({
         icon={<NeutralIcon />}
       />
       <TonalityCard
-        label="Негативные"
+        label="Отрицательные"
         percent={negativePercent}
         count={negativeCount}
         max={max}
@@ -59,7 +59,7 @@ const TonalityCard = ({ label, count, max, percent, icon }: TonalityCardProps) =
     <Grid.Col span={3}>
       <Card style={styles.card}>
         <div {...stylex.props(text.subheaderBold)}>
-          {label} <br /> отзывы
+          {label} <br /> упоминания
         </div>
         <div {...stylex.props(styles.percent)}>
           {icon}

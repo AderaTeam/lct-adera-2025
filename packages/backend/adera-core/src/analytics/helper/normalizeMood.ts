@@ -2,13 +2,13 @@ export function normalizeMood(
   mood: string,
 ): 'positive' | 'negative' | 'neutral' {
   switch (mood) {
-    case 'позитивный':
+    case 'положительно':
     case 'positive':
       return 'positive';
-    case 'негативный':
+    case 'отрицательно':
     case 'negative':
       return 'negative';
-    case 'нейтральный':
+    case 'нейтрально':
     case 'neutral':
       return 'neutral';
     default:

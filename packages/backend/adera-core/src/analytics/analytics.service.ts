@@ -12,9 +12,9 @@ import { ru } from 'date-fns/locale';
 import { splitPeriods } from 'src/common/utils/splitPeriods';
 
 const moodMap: Record<string, keyof ToneSummaryDto> = {
-  позитивный: 'positive',
-  негативный: 'negative',
-  нейтральный: 'neutral',
+  положительно: 'positive',
+  отрицательно: 'negative',
+  нейтрально: 'neutral',
 };
 
 type RawMoodDateStatsRow = {
@@ -28,7 +28,15 @@ export class AnalyticsService {
   constructor() {}
 
   async getDashboard() {
-    const [summary, topics, dynamics, toneDynamics, avgReviews, maxReviewsData, anomalies] = await Promise.all([
+    const [
+      summary,
+      topics,
+      dynamics,
+      toneDynamics,
+      avgReviews,
+      maxReviewsData,
+      anomalies,
+    ] = await Promise.all([
       this.getToneSummary(),
       this.getTopicsStats(),
       this.getDynamics(),
@@ -45,7 +53,7 @@ export class AnalyticsService {
       toneDynamics,
       avgReviews,
       maxReviewsData,
-      anomalies
+      anomalies,
     };
   }
 
@@ -241,45 +249,48 @@ export class AnalyticsService {
           (d) => d.review_date >= p.start && d.review_date <= p.end,
         );
         counts.forEach((c) => {
-          amounts[c.mood as 'positive' | 'negative' | 'neutral'] +=
-            c.count;
+          amounts[c.mood as 'positive' | 'negative' | 'neutral'] += c.count;
         });
         const name = `${format(p.start, 'dd.MM', { locale: ru })} - ${format(p.end, 'dd.MM')}`;
         return { name, ...amounts };
       });
     }
   }
-  private async getAvgReviews(
-    from?: string,
-    to?: string,
-  ){
+  private async getAvgReviews(from?: string, to?: string) {
     const dynamics = await this.getDynamics(from, to);
-    const avg = dynamics.reduce((sum, obj) => sum += obj.count, 0)/dynamics.length
-    return Math.round(avg)
+    const avg =
+      dynamics.reduce((sum, obj) => (sum += obj.count), 0) / dynamics.length;
+    return Math.round(avg);
   }
 
-  private async getMaxReviews(
-    from?: string,
-    to?: string,
-  ){
+  private async getMaxReviews(from?: string, to?: string) {
     const dynamics = await this.getDynamics(from, to);
-    const max = dynamics.reduce((max, obj) => max > obj.count ? max : obj.count, 0)
-    const maxMonth = dynamics.find((obj) => obj.count == max)
+    const max = dynamics.reduce(
+      (max, obj) => (max > obj.count ? max : obj.count),
+      0,
+    );
+    const maxMonth = dynamics.find((obj) => obj.count == max);
 
-    return maxMonth
+    return maxMonth;
   }
 
-  private async getAnomalies(
-    from?: string,
-    to?: string,
-  ){
-    const toneDynamics = await this.getToneDynamics(from, to)
-    const positiveAnomaly = toneDynamics.reduce((max, d) => max.positive > d.positive ? max : d)
-    const negativeAnomaly = toneDynamics.reduce((max, d) => max.negative > d.negative ? max : d)
+  private async getAnomalies(from?: string, to?: string) {
+    const toneDynamics = await this.getToneDynamics(from, to);
+    const positiveAnomaly = toneDynamics.reduce((max, d) =>
+      max.positive > d.positive ? max : d,
+    );
+    const negativeAnomaly = toneDynamics.reduce((max, d) =>
+      max.negative > d.negative ? max : d,
+    );
     return {
-      positive: {amount: positiveAnomaly.positive, name: positiveAnomaly.name},
-      negative: {amount: negativeAnomaly.negative, name: negativeAnomaly.name}
-    }
+      positive: {
+        amount: positiveAnomaly.positive,
+        name: positiveAnomaly.name,
+      },
+      negative: {
+        amount: negativeAnomaly.negative,
+        name: negativeAnomaly.name,
+      },
+    };
   }
-
 }
