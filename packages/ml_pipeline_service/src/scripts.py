@@ -98,9 +98,9 @@ def convert_to_json(df: pl.DataFrame) -> str:
             pl.col("avg_sentiment").map_elements(
             lambda a: 
                     a if type(a) is str else ( 
-                    "позитивный" if  4 <= a else 
-                    "негативный" if a <= 2.5 else 
-                    "нейтральный"
+                    "положительно" if  4 <= a else 
+                    "отрицательно" if a <= 2.5 else 
+                    "нейтрально"
                 ),
             return_dtype=pl.String
         ).alias("sentiments")
