@@ -44,9 +44,9 @@ DF = DF[:, ["id", "review_text","review_title","raiting","review_date", "source"
         pl.col("topic_mood").map_elements(
             lambda a: 
                     a if type(a) is str else ( 
-                    "позитивный" if  4 <= a else 
-                    "негативный" if a <= 2.5 else 
-                    "нейтральный"
+                    "позитивно" if  4 <= a else 
+                    "негативно" if a <= 2.5 else 
+                    "нейтрально"
                 ),
             return_dtype=pl.String
         )
