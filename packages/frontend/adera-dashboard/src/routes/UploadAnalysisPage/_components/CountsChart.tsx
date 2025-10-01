@@ -61,6 +61,8 @@ export const CountsChart = ({
             <XAxis
               tick={(props) => <CustomXTick {...props} activeIndex={activeIndex} />}
               tickMargin={5}
+              minTickGap={0}
+              interval={0}
               dataKey="name"
               stroke="#F1F1F133"
               strokeDasharray={8}
@@ -68,7 +70,6 @@ export const CountsChart = ({
             <YAxis tick={(props) => <CustomYTick {...props} />} tickMargin={16} stroke="#F1F1F133" />
             <Tooltip
               content={(props: TooltipProps<number, string> & { payload?: CustomPayload[] }) => {
-                console.log(props.payload);
                 return (
                   <CustomTooltip>
                     {!!(!!props.payload && props.payload.length && props.active) && (
@@ -91,7 +92,7 @@ export const CountsChart = ({
               fill="#1E52FF"
               radius={[12, 12, 0, 0]}
               shape={(props: BarProps & { chartHeight?: number }) => {
-                const { x, width = 120, y, height, index, chartHeight = 200 } = props;
+                const { x, width = 120, y, height, index, chartHeight = 225 } = props;
                 const isActive = index === activeIndex;
 
                 const _width = Number(+width > 120 ? 120 : width);
@@ -126,7 +127,8 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 24,
-    height: 355
+    height: 355,
+    overflow: 'hidden'
   },
   title: {
     color: colors.textPrimaryDefault
