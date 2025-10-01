@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import * as stylex from '@stylexjs/stylex';
 import { ArrowsSortIconM, ArrowsSortIconS, Flex, Grid, headers, MessageIconS, Modal, Stack, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
@@ -5,6 +6,7 @@ import { Card } from 'components/Card';
 import { ReviewBar } from 'components/ReviewBar';
 import { useFilters } from 'features/Filters/useFilters';
 import { SortDirections } from 'store/_types';
+import { calcPercents } from 'utils/calcPercents';
 
 export const TopReviews = ({
   topics
@@ -26,7 +28,19 @@ export const TopReviews = ({
     });
   };
 
-  const _topics = topics.sort((a, b) => (isPositiveTop ? b.positive - a.positive : b.negative - a.negative));
+  const extendedTopics = useMemo(
+    () =>
+      topics.map((t) => {
+        const [positivePercent, , negativePercent] = calcPercents([t.positive, t.neutral, t.negative]);
+
+        return { ...t, positivePercent, negativePercent };
+      }),
+    [topics]
+  );
+
+  const _topics = extendedTopics.sort((a, b) =>
+    isPositiveTop ? b.positivePercent - a.positivePercent : b.negativePercent - a.negativePercent
+  );
 
   return (
     <Grid.Col span={3}>
@@ -98,7 +112,7 @@ export const TopReviews = ({
                   <Flex justify="space-between" gap={8} style={text.defaultMedium}>
                     {t.name}
                     <Flex style={styles.count} gap={4}>
-                      {isPositiveTop ? t.positive : t.negative}
+                      {isPositiveTop ? t.positivePercent.toString() + '%' : t.negativePercent.toString() + '%'}
                       <div
                         {...stylex.props(
                           styles.circle(isPositiveTop ? colors.statusSuccess : colors.statusError)
