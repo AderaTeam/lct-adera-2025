@@ -3,7 +3,20 @@ import { Grid, MoodSadIcon, MoodSmileIcon, Stack, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
 
-export const AnomalyPeriods = () => {
+export const AnomalyPeriods = ({
+  anomalies
+}: {
+  anomalies: {
+    positive: {
+      amount: number;
+      name: string;
+    };
+    negative: {
+      amount: number;
+      name: string;
+    };
+  };
+}) => {
   return (
     <Grid.Col span={3}>
       <Card style={styles.root}>
@@ -15,12 +28,14 @@ export const AnomalyPeriods = () => {
                 <MoodSmileIcon />
               </div>
               <Stack gap={2}>
-                <div {...stylex.props(text.defaultBold, styles.countSuccess)}>12 упоминаний</div>
+                <div {...stylex.props(text.defaultBold, styles.countSuccess)}>
+                  {anomalies.positive.amount} упоминаний
+                </div>
                 <div {...stylex.props(text.defaultRegular)}>Самый позитивный</div>
               </Stack>
             </Stack>
 
-            <div {...stylex.props(styles.date, text.defaultBold)}>Октябрь 2024</div>
+            <div {...stylex.props(styles.date, text.defaultBold)}>{anomalies.positive.name}</div>
           </div>
 
           <div {...stylex.props(styles.period)}>
@@ -29,12 +44,12 @@ export const AnomalyPeriods = () => {
                 <MoodSadIcon />
               </div>
               <Stack gap={2}>
-                <div {...stylex.props(text.defaultBold, styles.countError)}>12 упоминаний</div>
+                <div {...stylex.props(text.defaultBold, styles.countError)}>{anomalies.negative.amount} упоминаний</div>
                 <div {...stylex.props(text.defaultRegular)}>Самый негативный </div>
               </Stack>
             </Stack>
 
-            <div {...stylex.props(styles.date, text.defaultBold)}>Сентябрь 2024</div>
+            <div {...stylex.props(styles.date, text.defaultBold)}>{anomalies.negative.name}</div>
           </div>
         </Stack>
       </Card>

@@ -20,4 +20,19 @@ export interface ApiDashboard {
     negative: number;
     neutral: number;
   }[];
+  avgReviews: number;
+  maxReviewsData: {
+    name: string;
+    count: number;
+  };
+  anomalies: {
+    positive: {
+      amount: number;
+      name: string;
+    };
+    negative: {
+      amount: number;
+      name: string;
+    };
+  };
 }

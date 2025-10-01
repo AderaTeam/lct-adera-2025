@@ -3,8 +3,29 @@ import { Flex, Grid, headers, Stack, text } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
 import { Card } from 'components/Card';
 import { ReviewBar } from 'components/ReviewBar';
+import { calcPercents } from 'utils/calcPercents';
 
-export const MostReviews = () => {
+export const MostReviews = ({
+  avgReviews,
+  maxReviewsData,
+  maxReviewsDataTone
+}: {
+  avgReviews: number;
+  maxReviewsData: {
+    name: string;
+    count: number;
+  };
+  maxReviewsDataTone?: {
+    name: string;
+    positive: number;
+    negative: number;
+    neutral: number;
+  };
+}) => {
+  const [positivePercent] = maxReviewsDataTone
+    ? calcPercents([maxReviewsDataTone.positive, maxReviewsDataTone.neutral, maxReviewsDataTone.negative])
+    : [0];
+
   return (
     <Grid.Col span={3}>
       <Card style={styles.root}>
@@ -13,19 +34,17 @@ export const MostReviews = () => {
           <Flex style={styles.block} gap={16}>
             <Stack style={styles.stat} gap={8}>
               <Flex gap={10} align="flex-end">
-                <div {...stylex.props(headers.numeric)}>12</div>
+                <div {...stylex.props(headers.numeric)}>{maxReviewsData.count}</div>
                 <Flex style={[styles.percent, text.subheaderSemibold]} gap={6}>
-                  <div {...stylex.props(styles.circle)}></div> 60%
+                  <div {...stylex.props(styles.circle)}></div> {positivePercent}%
                 </Flex>
               </Flex>
-              <ReviewBar positiveCount={10} negativeCount={3} neutralCount={4} />
+              {maxReviewsDataTone && <ReviewBar {...maxReviewsDataTone} />}
             </Stack>
-            <div {...stylex.props(styles.date, text.defaultBold)}>
-              01.10.24 <br /> - <br /> 01.11.24
-            </div>
+            <div {...stylex.props(styles.date, text.defaultBold)}>{maxReviewsData.name}</div>
           </Flex>
           <Flex style={styles.block} gap={12}>
-            <h1 {...stylex.props(headers.h1Medium)}>5</h1> <div>- в среднем за период</div>
+            <h1 {...stylex.props(headers.h1Medium)}>{avgReviews}</h1> <div>- в среднем за период</div>
           </Flex>
         </Stack>
       </Card>
@@ -58,6 +77,7 @@ const styles = stylex.create({
     borderWidth: 2,
     color: colors.textSecondaryDefault,
     display: 'flex',
+    height: '100%',
     justifyContent: 'center',
     paddingBlock: 6,
     paddingInline: 10,

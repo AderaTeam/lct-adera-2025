@@ -19,6 +19,8 @@ export const AnalyticsPage = () => {
     queryFn: () => authFetch('/analytics/dashboard')
   });
 
+  const maxReviewsDataTone = dashboard.toneDynamics.find((d) => d.name === dashboard.maxReviewsData.name);
+
   return (
     <main>
       <Container style={styles.root}>
@@ -34,9 +36,13 @@ export const AnalyticsPage = () => {
           />
           <TopReviews topics={dashboard.topics} />
           <DynamicsTonality dynamics={dashboard.toneDynamics} />
-          <AnomalyPeriods />
+          <AnomalyPeriods anomalies={dashboard.anomalies} />
           <DynamicsNumber dynamics={dashboard.dynamics} />
-          <MostReviews />
+          <MostReviews
+            avgReviews={dashboard.avgReviews}
+            maxReviewsData={dashboard.maxReviewsData}
+            maxReviewsDataTone={maxReviewsDataTone}
+          />
         </Grid>
       </Container>
     </main>
