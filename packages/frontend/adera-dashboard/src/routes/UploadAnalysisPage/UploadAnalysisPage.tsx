@@ -10,6 +10,7 @@ import { TopReviews } from 'features/TopReviews';
 import { ApiFileAnalysisDetail } from 'store/_types';
 import { formatDate } from 'utils/formatDate';
 import { invariant } from 'utils/invariant';
+import { CountsChart } from './_components/CountsChart';
 
 export const UploadAnalysisPage = () => {
   const { id } = useParams();
@@ -20,6 +21,8 @@ export const UploadAnalysisPage = () => {
     queryKey: ['file-analysis', { id }],
     queryFn: () => authFetch<ApiFileAnalysisDetail>(`/file-analysis/${id}`)
   });
+
+  const topicCounts = fileAnalysis.topics.map((t) => ({ name: t.name, count: t.negative + t.neutral + t.positive }));
 
   return (
     <main>
@@ -43,6 +46,7 @@ export const UploadAnalysisPage = () => {
             negativeCount={fileAnalysis.summary.negative}
           />
           <TopReviews topics={fileAnalysis.topics} />
+          <CountsChart topics={topicCounts} />
         </Grid>
       </Container>
     </main>
