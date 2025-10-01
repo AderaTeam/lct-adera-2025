@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "6cc79d64-fc36-470f-8a78-4820748cb6c6",
+		"name": "core",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20751805"
+	},
+	"item": [
+		{
+			"name": "справочники (directories/)",
+			"item": [
+				{
+					"name": "/sources - источники отзывов",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{core_url}}/directories/sources",
+							"host": [
+								"{{core_url}}"
+							],
+							"path": [
+								"directories",
+								"sources"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "S3",
+			"item": [
+				{
+					"name": "GET Presigned url",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{core_url}}/s3/presignedUrl?object_key=20250615_229a89e2821f41da8989bf7de9784429.jpg",
+							"host": [
+								"{{core_url}}"
+							],
+							"path": [
+								"s3",
+								"presignedUrl"
+							],
+							"query": [
+								{
+									"key": "auto_download_attachment",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "object_key",
+									"value": "20250615_229a89e2821f41da8989bf7de9784429.jpg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Presigned url",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fileName\": \"file.json\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{core_url}}/s3/presignedUrl",
+							"host": [
+								"{{core_url}}"
+							],
+							"path": [
+								"s3",
+								"presignedUrl"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT example",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-amz-meta-source",
+								"value": "adera-admin",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/box/20250531_982e5f4eaa904206883d0e0862927824.webp?X-Amz-Expires=172800&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=iGj54LblJO3Ttr8OOh4i%2F20250531%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250531T175930Z&X-Amz-SignedHeaders=host%3Bx-amz-meta-source&X-Amz-Signature=ef7ba7646aa40199063d3c994d0e13f6ceb6f89077ade4a6c09ba5aaec595720",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"box",
+								"20250531_982e5f4eaa904206883d0e0862927824.webp"
+							],
+							"query": [
+								{
+									"key": "X-Amz-Expires",
+									"value": "172800"
+								},
+								{
+									"key": "X-Amz-Algorithm",
+									"value": "AWS4-HMAC-SHA256"
+								},
+								{
+									"key": "X-Amz-Credential",
+									"value": "iGj54LblJO3Ttr8OOh4i%2F20250531%2Fus-east-1%2Fs3%2Faws4_request"
+								},
+								{
+									"key": "X-Amz-Date",
+									"value": "20250531T175930Z"
+								},
+								{
+									"key": "X-Amz-SignedHeaders",
+									"value": "host%3Bx-amz-meta-source"
+								},
+								{
+									"key": "X-Amz-Signature",
+									"value": "ef7ba7646aa40199063d3c994d0e13f6ceb6f89077ade4a6c09ba5aaec595720"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ML",
+			"item": [
+				{
+					"name": "Predict model response on specific data values",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Dashboard",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
