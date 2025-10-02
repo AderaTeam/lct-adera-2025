@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { Flex } from '@adera/ui';
-import { ModalFilter } from './_components/ModalFilter';
+import { ModalFilter } from 'features/ModalFilter';
 import { PeriodFilter } from './_components/PeriodFilter';
 import { useDirectoryOptions } from './useDirectoryOptions';
 import { useFilters } from './useFilters';
