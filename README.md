@@ -104,6 +104,38 @@
 
 Детальную информацию по конкретным пакетам ищите в их собственных `README.md`.
 
+### Развертывание
+
+Развертывание проекта происходит с использованием возможностей docker и docker compose.
+
+#### Backend и инфраструктура
+
+Для развертывания backend составляющей приложения сначала необходимо поднять контейнеры, описанные с помощью docker compose в директории _docker.
+
+Перед развертыванием в директориях _docker и packages/backend/adera-core должны быть созданы файлы окружения .env, которые должны быть развернуты в соответствии с примерами .env.example соответственно для каждой директории, стоит отметить, что переменные окружения S3_ACCESS_KEY и S3_SECRET_KEY во время первого запуска будут пусты.
+
+После того как все переменные окружения (кроме S3_ACCESS_KEY и S3_SECRET_KEY) заполнены, необходимо произвести запуск контейнеров из директории _docker командой docker compose up. Далее необходимо перейти в консоль minio с помощью данных для входа указанных в окружении, создать bucket с названием box (Важно!) и создать access key для доступа к minio. После этого полученные access и secret ключи нужно занести в окружение adera-core, после чего перезапустить контейнеры, чтобы изменения применились. 
+
+После этого, бэкенд будет доступен на порте 3000.
+
+#### Frontend
+
+Для развертывания frontend составляющей сервиса необходимо заполнить .env согласно .env.example в директории packages/frontend/adera-dashboard
+
+После этого необходимо последовательно выполнить следующие команды из корня репозитория:
+```
+docker build -t adera-dashboard -f packages/frontend/adera-dashboard/Dockerfile .
+```
+```
+docker stop adera-dashboard-container || true && docker rm adera-dashboard-container || true
+```
+
+```
+docker run -d -p 5173:8080 --name adera-dashboard-container --env-file packages/frontend/adera-dashboard/.env adera-dashboard
+```
+
+После этого, фронтенд будет доступен на порте 5173.
+
 ### Разработка
 
 Здесь используются (и уже настроены) современная версия [Yarn 2+](https://yarnpkg.com/getting-started/migration) и [Yarn Workspaces](https://yarnpkg.com/features/workspaces) –
