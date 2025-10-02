@@ -66,6 +66,8 @@ export const DynamicsTonality = ({
             <XAxis
               tick={(props) => <CustomXTick {...props} activeIndex={activeIndex} />}
               tickMargin={5}
+              minTickGap={0}
+              interval={0}
               dataKey="name"
               stroke="#F1F1F11A"
             />
