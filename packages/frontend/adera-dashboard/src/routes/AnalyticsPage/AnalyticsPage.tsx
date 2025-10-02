@@ -1,23 +1,20 @@
 import * as stylex from '@stylexjs/stylex';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useAuthFetch } from '@adera/auth-fetch';
 import { Container, Flex, Grid, headers } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
-import { Filters } from 'features/Filters';
+import { Filters, useFilters } from 'features/Filters';
 import { Tonality } from 'features/Tonality';
 import { TopReviews } from 'features/TopReviews';
-import { ApiDashboard } from 'store/_types';
 import { AnomalyPeriods } from './_components/AnomalyPeriods';
 import { DynamicsNumber } from './_components/DynamicsNumber';
 import { DynamicsTonality } from './_components/DynamicsTonality';
 import { MostReviews } from './_components/MostReviews';
+import { useDashboard } from './useDashboard';
 
 export const AnalyticsPage = () => {
-  const authFetch = useAuthFetch();
-  const { data: dashboard } = useSuspenseQuery<ApiDashboard>({
-    queryKey: ['analytics-dashboard'],
-    queryFn: () => authFetch('/analytics/dashboard')
-  });
+  const { filters } = useFilters();
+  const { data: dashboard } = useDashboard(filters);
+
+  if (!dashboard) return null;
 
   const maxReviewsDataTone = dashboard.toneDynamics.find((d) => d.name === dashboard.maxReviewsData.name);
 

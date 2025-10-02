@@ -13,6 +13,7 @@ import { HttpStatus } from '@adera/common-enums';
 import { AnalyzeResponseDto } from './dto/analyze-response.dto';
 import { AnalyzeBodyDto } from './dto/analyze-body.dto';
 import { db, DbTables } from 'src/db/db';
+import appConfig from 'src/common/appConfig';
 
 const moodMap: Record<string, keyof ToneSummaryDto> = {
   положительно: 'positive',
@@ -48,7 +49,22 @@ export class FileAnalysisService {
     }));
   }
 
-  async findOne(id: string): Promise<FileAnalysisDetailDto> {
+  async getTopics(id: string) {
+    const query = await db({ t: DbTables.FileAnalysisPredictionTopic })
+      .select<
+        { id: number; name: string }[]
+      >(db.raw('MIN(t.id) as id'), 't.topic as name')
+      .join({ p: DbTables.FileAnalysisPrediction }, 't.prediction_id', 'p.id')
+      .where('p.file_analysis_id', id)
+      .groupBy('t.topic');
+
+    return query;
+  }
+
+  async findOne(
+    id: string,
+    topicNames: string[],
+  ): Promise<FileAnalysisDetailDto> {
     const fileAnalysis = await db(DbTables.FileAnalysis)
       .select<{ id: number; created_at: string }[]>('id', 'created_at')
       .where('id', id)
@@ -61,8 +77,7 @@ export class FileAnalysisService {
       });
     }
 
-    // Получаем все темы и сентименты для файла
-    const rows = await db(DbTables.FileAnalysisPredictionTopic)
+    const rowsQuery = db(DbTables.FileAnalysisPredictionTopic)
       .select<{ topic: string; sentiment: string }[]>('topic', 'sentiment')
       .join(
         DbTables.FileAnalysisPrediction,
@@ -70,6 +85,12 @@ export class FileAnalysisService {
         'file_analysis_prediction.id',
       )
       .where('file_analysis_prediction.file_analysis_id', id);
+
+    if (topicNames.length > 0) {
+      rowsQuery.whereIn('file_analysis_prediction_topic.topic', topicNames);
+    }
+
+    const rows = await rowsQuery;
 
     if (!rows.length) {
       throw new AppError({
@@ -124,7 +145,7 @@ export class FileAnalysisService {
     try {
       const analyzeResponse = await firstValueFrom(
         this.httpService.post<AnalyzeResponseDto>(
-          'http://94.241.143.123:8000/get_analize', // вынести в .env
+          appConfig.ML_API_URL + '/predict',
           jsonData,
           { headers: { 'Content-Type': 'application/json' } },
         ),

@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
+import { DashboardQueryDto } from './dto/dashboard-query.dto';
 
 @Controller('analytics')
 export class AnalyticsController {
@@ -9,7 +10,10 @@ export class AnalyticsController {
    * GET, Получение данных о дашборде
    */
   @Get('dashboard')
-  async getDashboard() {
-    return this.analyticsService.getDashboard();
+  async getDashboard(
+    @Query(new ValidationPipe({ transform: true, whitelist: true }))
+    query: DashboardQueryDto,
+  ) {
+    return this.analyticsService.getDashboard(query);
   }
 }

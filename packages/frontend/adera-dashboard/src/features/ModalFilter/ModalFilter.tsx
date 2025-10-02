@@ -30,6 +30,8 @@ interface ModalFilterProps {
   onFilterUpdate?: (value: string) => void;
 
   style?: StyleXStyles;
+
+  isMax?: boolean;
 }
 
 export const ModalFilter = ({
@@ -38,6 +40,7 @@ export const ModalFilter = ({
   options = [],
   value = 'all',
   onFilterUpdate,
+  isMax,
   style
 }: ModalFilterProps) => {
   const [open, setOpen] = useState(false);
@@ -119,7 +122,7 @@ export const ModalFilter = ({
         <Stack gap={28} style={styles.root}>
           {!!description && <div {...stylex.props(styles.description)}>{description}</div>}
 
-          <Grid style={styles.list} rowGap={8} columnGap={16}>
+          <Grid style={[styles.list, isMax && styles.maxList]} rowGap={8} columnGap={16}>
             <Grid.Col span={options.length > 7 ? 6 : 12}>
               <label htmlFor="all" {...stylex.props(styles.label)} aria-checked={isAllSelected || isPartiallySelected}>
                 <Checkbox
@@ -188,7 +191,14 @@ const styles = stylex.create({
     color: colors.textSecondaryDefault,
     paddingInline: 16
   },
-  list: { gridAutoRows: 'max-content', height: 412, marginBottom: 20 },
+  list: {
+    gridAutoRows: 'max-content',
+    height: 412,
+    marginBottom: 20
+  },
+  maxList: {
+    height: 472
+  },
   label: {
     alignItems: 'center',
     backgroundColor: {
