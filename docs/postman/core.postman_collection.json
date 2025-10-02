@@ -192,6 +192,43 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "File analysis",
+			"item": [
+				{
+					"name": "List of all analysis files",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Single analysis info",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Create new analysis",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Topics of a single analysis",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
