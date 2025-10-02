@@ -173,8 +173,27 @@
 				{
 					"name": "Predict model response on specific data values",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"text\": \"Очень понравилось обслуживание в отделении, но мобильное приложение часто зависает.\"\n        },\n        {\n            \"id\": 2,\n            \"text\": \"Кредитную карту одобрили быстро, но лимит слишком маленький.\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{ml_url}}/predict",
+							"protocol": "https",
+							"host": [
+								"{{ml_url}}"
+							],
+							"path": [
+								"predict"
+							]
+						}
 					},
 					"response": []
 				}
@@ -187,7 +206,17 @@
 					"name": "Dashboard",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{core_url}}/analytics/dashboard",
+							"host": [
+								"{{core_url}}"
+							],
+							"path": [
+								"analytics",
+								"dashboard"
+							]
+						}
 					},
 					"response": []
 				}
@@ -200,7 +229,16 @@
 					"name": "List of all analysis files",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{core_url}}/file-analysis",
+							"host": [
+								"{{core_url}}"
+							],
+							"path": [
+								"file-analysis"
+							]
+						}
 					},
 					"response": []
 				},
@@ -215,8 +253,26 @@
 				{
 					"name": "Create new analysis",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"objectKey\": \"someobjectkeyfromS3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{core_url}}/file-analysis",
+							"host": [
+								"{{core_url}}"
+							],
+							"path": [
+								"file-analysis"
+							]
+						}
 					},
 					"response": []
 				},
@@ -224,7 +280,23 @@
 					"name": "Topics of a single analysis",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{core_url}}/topics/:id",
+							"host": [
+								"{{core_url}}"
+							],
+							"path": [
+								"topics",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": []
 				}
