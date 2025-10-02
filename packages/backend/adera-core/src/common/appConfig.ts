@@ -10,6 +10,7 @@ export interface IAppConfig {
   POSTGRES_DB: string;
   POSTGRES_SSL: boolean;
   POSTGRES_CONNECTION_POOL_SIZE: number;
+  ML_API_URL: string;
 }
 
 const envValidationSchema = z.object({
@@ -31,6 +32,8 @@ const envValidationSchema = z.object({
     .gte(1)
     .optional()
     .default(16),
+
+  ML_API_URL: z.string(),
 });
 
 const envValidationResult = envValidationSchema.safeParse(env);
