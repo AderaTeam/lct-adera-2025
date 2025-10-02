@@ -7,9 +7,11 @@ import {
   TopicStatsDto,
 } from './dto/analytics.dto';
 import { normalizeMood } from './helper/normalizeMood';
-import { format } from 'date-fns';
+import { endOfDay, format, startOfDay } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { splitPeriods } from 'src/common/utils/splitPeriods';
+import { DashboardQueryDto } from './dto/dashboard-query.dto';
+import { getUTCTime } from 'src/db/getUTCTime';
 
 const moodMap: Record<string, keyof ToneSummaryDto> = {
   положительно: 'positive',
@@ -27,39 +29,41 @@ type RawMoodDateStatsRow = {
 export class AnalyticsService {
   constructor() {}
 
-  async getDashboard() {
-    const [
-      summary,
-      topics,
-      dynamics,
-      toneDynamics,
-      avgReviews,
-      maxReviewsData,
-      anomalies,
-    ] = await Promise.all([
-      this.getToneSummary(),
-      this.getTopicsStats(),
-      this.getDynamics(),
-      this.getToneDynamics(),
-      this.getAvgReviews(),
-      this.getMaxReviews(),
-      this.getAnomalies(),
+  async getDashboard(query: DashboardQueryDto) {
+    const [summary, topics, dynamics, toneDynamics] = await Promise.all([
+      this.getToneSummary(query),
+      this.getTopicsStats(query),
+      this.getDynamics(query),
+      this.getToneDynamics(query),
     ]);
+
+    const total = dynamics.reduce((sum, { count }) => sum + count, 0);
+
+    const positive = toneDynamics.reduce((max, d) =>
+      d.positive > max.positive ? d : max,
+    );
+    const negative = toneDynamics.reduce((max, d) =>
+      d.negative > max.negative ? d : max,
+    );
 
     return {
       summary,
       topics,
       dynamics,
       toneDynamics,
-      avgReviews,
-      maxReviewsData,
-      anomalies,
+      avgReviews: Math.round(total / dynamics.length),
+      maxReviewsData: dynamics.reduce((maxObj, current) =>
+        current.count > maxObj.count ? current : maxObj,
+      ),
+      anomalies: {
+        positive: { amount: positive.positive, name: positive.name },
+        negative: { amount: negative.negative, name: negative.name },
+      },
     };
   }
 
   private async getToneSummary(
-    from?: string,
-    to?: string,
+    filters: DashboardQueryDto,
   ): Promise<ToneSummaryDto> {
     const query = db({ rt: DbTables.ReviewTopics })
       .select<{ topic_mood: string; count: string }[]>('rt.topic_mood')
@@ -67,8 +71,14 @@ export class AnalyticsService {
       .join({ r: DbTables.Reviews }, 'rt.review_id', 'r.review_id')
       .groupBy('rt.topic_mood');
 
+    const { from, to, topics } = filters;
+
     if (from && to) {
       query.whereBetween('r.review_date', [from, to]);
+    }
+
+    if (topics && topics.length) {
+      query.whereIn('rt.topic_id', topics);
     }
 
     const rows = await query;
@@ -86,8 +96,7 @@ export class AnalyticsService {
   }
 
   private async getTopicsStats(
-    from?: string,
-    to?: string,
+    filters: DashboardQueryDto,
   ): Promise<TopicStatsDto[]> {
     type RawTopicStatsRow = {
       topicName: string;
@@ -104,8 +113,14 @@ export class AnalyticsService {
       .join({ t: DbTables.Topics }, 'rt.topic_id', 't.topic_id')
       .groupBy('t.topic_name', 'rt.topic_mood');
 
+    const { from, to, topics } = filters;
+
     if (from && to) {
       query.whereBetween('r.review_date', [from, to]);
+    }
+
+    if (topics && topics.length) {
+      query.whereIn('rt.topic_id', topics);
     }
 
     const rows = await query;
@@ -134,17 +149,27 @@ export class AnalyticsService {
   }
 
   private async getDynamics(
-    from?: string,
-    to?: string,
+    filters: DashboardQueryDto,
   ): Promise<DynamicsDto[]> {
-    const rows = await db(DbTables.Reviews)
-      .select<{ review_date: Date; count: string }[]>('review_date')
+    const { from, to, topics } = filters;
+
+    const rows = await db({ r: DbTables.Reviews })
+      .select<{ review_date: Date; count: string }[]>('r.review_date')
       .count('* as count')
-      .groupBy('review_date')
-      .orderBy('review_date');
+      .modify((qb) => {
+        if (topics && topics.length) {
+          qb.join(
+            { rt: DbTables.ReviewTopics },
+            'rt.review_id',
+            'r.review_id',
+          ).whereIn('rt.topic_id', topics);
+        }
+      })
+      .groupBy('r.review_date')
+      .orderBy('r.review_date', 'asc');
 
     let data: { date: Date; count: number }[] = rows.map((r) => ({
-      date: new Date(r.review_date),
+      date: getUTCTime(r.review_date),
       count: Number(r.count),
     }));
 
@@ -160,23 +185,29 @@ export class AnalyticsService {
         count: monthMap[i] || 0,
       })).filter((m) => Boolean(m.count));
     } else {
-      const start = new Date(from);
-      const end = new Date(to);
+      const start = getUTCTime(from);
+      const end = getUTCTime(to);
       const periods = splitPeriods(start, end);
 
       return periods.map((p) => {
+        const start = startOfDay(p.start).getTime();
+        const end = endOfDay(p.end).getTime();
+
         const count = data
-          .filter((d) => d.date >= p.start && d.date <= p.end)
+          .filter((d) => {
+            const time = new Date(d.date).getTime();
+            return time >= start && time <= end;
+          })
           .reduce((sum, d) => sum + d.count, 0);
-        const name = `${format(p.start, 'dd.MM', { locale: ru })} - ${format(p.end, 'dd.MM')}`;
+
+        const name = `${format(p.start, 'dd.MM', { locale: ru })} - ${format(p.end, 'dd.MM', { locale: ru })}`;
         return { name, count };
       });
     }
   }
 
   private async getToneDynamics(
-    from?: string,
-    to?: string,
+    filters: DashboardQueryDto,
   ): Promise<ToneDynamicsDto[]> {
     const query = db({ rt: DbTables.ReviewTopics })
       .select<
@@ -187,8 +218,14 @@ export class AnalyticsService {
       .join({ t: DbTables.Topics }, 'rt.topic_id', 't.topic_id')
       .groupBy('r.review_date', 'rt.topic_mood');
 
+    const { from, to, topics } = filters;
+
     if (from && to) {
       query.whereBetween('r.review_date', [from, to]);
+    }
+
+    if (topics && topics.length) {
+      query.whereIn('rt.topic_id', topics);
     }
 
     const rows = await query;
@@ -198,7 +235,7 @@ export class AnalyticsService {
       mood: string;
       count: number;
     }[] = rows.map((r) => ({
-      review_date: new Date(r.reviewDate),
+      review_date: getUTCTime(r.reviewDate.toString()),
       mood: normalizeMood(r.mood.toString()),
       count: Number(r.count),
     }));
@@ -235,8 +272,8 @@ export class AnalyticsService {
         neutral: monthMap[i] ? monthMap[i].neutral : 0,
       })).filter((m) => Boolean(m.negative || m.positive || m.neutral));
     } else {
-      const start = new Date(from);
-      const end = new Date(to);
+      const start = getUTCTime(from);
+      const end = getUTCTime(to);
       const periods = splitPeriods(start, end);
 
       return periods.map((p) => {
@@ -245,9 +282,15 @@ export class AnalyticsService {
           negative: 0,
           neutral: 0,
         };
-        const counts = data.filter(
-          (d) => d.review_date >= p.start && d.review_date <= p.end,
-        );
+
+        const start = startOfDay(p.start).getTime();
+        const end = endOfDay(p.end).getTime();
+
+        const counts = data.filter((d) => {
+          const time = new Date(d.review_date).getTime();
+
+          return time >= start && time <= end;
+        });
         counts.forEach((c) => {
           amounts[c.mood as 'positive' | 'negative' | 'neutral'] += c.count;
         });
@@ -255,42 +298,5 @@ export class AnalyticsService {
         return { name, ...amounts };
       });
     }
-  }
-  private async getAvgReviews(from?: string, to?: string) {
-    const dynamics = await this.getDynamics(from, to);
-    const avg =
-      dynamics.reduce((sum, obj) => (sum += obj.count), 0) / dynamics.length;
-    return Math.round(avg);
-  }
-
-  private async getMaxReviews(from?: string, to?: string) {
-    const dynamics = await this.getDynamics(from, to);
-    const max = dynamics.reduce(
-      (max, obj) => (max > obj.count ? max : obj.count),
-      0,
-    );
-    const maxMonth = dynamics.find((obj) => obj.count == max);
-
-    return maxMonth;
-  }
-
-  private async getAnomalies(from?: string, to?: string) {
-    const toneDynamics = await this.getToneDynamics(from, to);
-    const positiveAnomaly = toneDynamics.reduce((max, d) =>
-      max.positive > d.positive ? max : d,
-    );
-    const negativeAnomaly = toneDynamics.reduce((max, d) =>
-      max.negative > d.negative ? max : d,
-    );
-    return {
-      positive: {
-        amount: positiveAnomaly.positive,
-        name: positiveAnomaly.name,
-      },
-      negative: {
-        amount: negativeAnomaly.negative,
-        name: negativeAnomaly.name,
-      },
-    };
   }
 }
