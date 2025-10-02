@@ -2,18 +2,18 @@
 
 # Переменые
 
-`SENTENCE_TRANSFORMER_MODEL_NAME` - модель для векторизации текстов
-`SENTENCE_PROCESSOR_NAME` - наименования `Spacy`-файла
-`DEVICE` - тип девайса
-`BATCH_SIZE` - размер батча для векторизации
-`SENTIMENT_MODEL_PATH` - путь к модели, определяющее настроение
-`CONFIG_PATH` - путь к конфигам
-`LOW_PROPABILITY_LIMIT` - низши лимит по вероятности
-`DB_HOST` - хост БД
-`DB_PORT` - порт БД
-`DB_NAME` - наименование БД
-`DB_USER` - имя пользователя БД
-`DB_USER_PW` - пароль для пользователя БД 
+- `SENTENCE_TRANSFORMER_MODEL_NAME` - модель для векторизации текстов
+- `SENTENCE_PROCESSOR_NAME` - наименования `Spacy`-файла
+- `DEVICE` - тип девайса
+- `BATCH_SIZE` - размер батча для векторизации
+- `SENTIMENT_MODEL_PATH` - путь к модели, определяющее настроение
+- `CONFIG_PATH` - путь к конфигам
+- `LOW_PROPABILITY_LIMIT` - низши лимит по вероятности
+- `DB_HOST` - хост БД
+- `DB_PORT` - порт БД
+- `DB_NAME` - наименование БД
+- `DB_USER` - имя пользователя БД
+- `DB_USER_PW` - пароль для пользователя БД 
 
 # Конфигурационный файл
 
