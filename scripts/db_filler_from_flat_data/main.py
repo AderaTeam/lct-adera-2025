@@ -1,3 +1,4 @@
+from enum import Enum
 import polars as pl
 import psycopg2
 from psycopg2.extras import execute_batch
@@ -5,206 +6,156 @@ from typing import List, Dict, Any
 import os
 from datetime import datetime
 import dotenv
+from psycopg2.extras import execute_batch
+
+class TABLES(str, Enum):
+    cities="cities"
+
+dotenv.load_dotenv()
+# Database configuration
+DB_CONFIGS = {
+    'host': str(os.getenv('HOST')),
+    'database': str(os.getenv('POSTGRES_DATABASE')),
+    'user': str(os.getenv('POSTGRES_USER')),
+    'password': str(os.getenv('POSTGRES_PASSWORD')),
+    'port': int(os.getenv('PORT'))
+}
+
+DB_CONNECTION = psycopg2.connect(**DB_CONFIGS)
+DB_CURSOR = DB_CONNECTION.cursor()
 
 
-class ReviewDataUploader:
-    def __init__(self, db_config: Dict[str, str]):
+if str(os.getenv('CLEAN_PREVIOUS_DATA')) == 'True':
+    DB_CURSOR.execute(
         """
-        Initialize the uploader with database configuration
-        
-        Args:
-            db_config: Dictionary with database connection parameters
-                (host, port, database, user, password)
+            DELETE FROM review_topics;
+            DELETE FROM reviews;
+            DELETE FROM topics;
+            DELETE FROM sources;
+            DELETE FROM cities;
         """
-        self.db_config = db_config
-        self.connection = None
-        
-    def connect(self):
-        """Establish database connection"""
-        try:
-            self.connection = psycopg2.connect(**self.db_config)
-            print("Successfully connected to the database")
-        except Exception as e:
-            print(f"Error connecting to database: {e}")
-            raise
-    
-    def disconnect(self):
-        """Close database connection"""
-        if self.connection:
-            self.connection.close()
-            print("Database connection closed")
-    
-    def get_or_create_id(self, table: str, name_column: str, name: str, return_column: str = None) -> int:
-        """
-        Get existing ID or create new record and return ID
-        
-        Args:
-            table: Table name
-            name_column: Column name containing the unique name
-            name: Value to look for or insert
-            return_column: Column to return (defaults to primary key)
-            
-        Returns:
-            ID of the record
-        """
-        if return_column is None:
-            return_column = f"{table.split('_')[0]}_id"  # e.g., 'source_id' for 'sources' table
-        
-        with self.connection.cursor() as cursor:
-            # Try to get existing ID
-            cursor.execute(f"""
-                SELECT {return_column} FROM {table} 
-                WHERE {name_column} = %s
-            """, (name,))
-            result = cursor.fetchone()
-            
-            if result:
-                return result[0]
-            
-            # Insert new record if not exists
-            cursor.execute(f"""
-                INSERT INTO {table} ({name_column}) 
-                VALUES (%s) 
-                RETURNING {return_column}
-            """, (name,))
-            self.connection.commit()
-            return cursor.fetchone()[0]
-    
-    def upload_data(self, df: pl.DataFrame, batch_size: int = 1000):
-        """
-        Upload data from Polars DataFrame to database
-        
-        Args:
-            df: Polars DataFrame with the required columns
-            batch_size: Number of records to process in each batch
-        """
-        if self.connection is None:
-            self.connect()
-        
-        # Required columns check
-        required_columns = [
-            'topic_name', 'topic_mood', 'review_title', 'review_text',
-            'review_date', 'raiting', 'source', 'city_name'
-        ]
-        
-        missing_columns = [col for col in required_columns if col not in df.columns]
-        if missing_columns:
-            raise ValueError(f"Missing required columns: {missing_columns}")
-        
-        # Convert to pandas for easier iteration (optional - you can use Polars if preferred)
-        pandas_df = df.to_pandas()
-        
-        # Process data in batches
-        for i in range(0, len(pandas_df), batch_size):
-            batch = pandas_df.iloc[i:i + batch_size]
-            self._process_batch(batch)
-            print(f"Processed batch {i//batch_size + 1}/{(len(pandas_df)-1)//batch_size + 1}")
-        
-        print("Data upload completed successfully!")
-    
-    def _process_batch(self, batch):
-        """Process a single batch of records"""
-        try:
-            with self.connection.cursor() as cursor:
-                # Process each row in the batch
-                for _, row in batch.iterrows():
-                    # Get or create source_id
-                    source_id = self.get_or_create_id('sources', 'source_name', row['source'], return_column="source_id")
-                    
-                    # Get or create city_id
-                    city_id = self.get_or_create_id('cities', 'city_name', row['city_name'], return_column='city_id')
-                    
-                    # Get or create topic_id
-                    topic_id = self.get_or_create_id('topics', 'topic_name', row['topic_name'], return_column='topic_id')
-                    
-                    # Insert review and get review_id
-                    cursor.execute("""
-                        INSERT INTO reviews (
-                            review_title, review_text, rating, review_date, 
-                            city_id, source_id
-                        ) VALUES (%s, %s, %s, %s, %s, %s)
-                        RETURNING review_id
-                    """, (
-                        row['review_title'], 
-                        row['review_text'], 
-                        row['raiting'], 
-                        row['review_date'], 
-                        city_id, 
-                        source_id
-                    ))
-                    
-                    review_id = cursor.fetchone()[0]
-                    
-                    # Insert into review_topics
-                    cursor.execute("""
-                        INSERT INTO review_topics (review_id, topic_id, topic_mood)
-                        VALUES (%s, %s, %s)
-                        ON CONFLICT (review_id, topic_id) DO UPDATE SET
-                        topic_mood = EXCLUDED.topic_mood,
-                        created_at = CURRENT_TIMESTAMP
-                    """, (review_id, topic_id, row['topic_mood']))
-                
-                self.connection.commit()
-                
-        except Exception as e:
-            self.connection.rollback()
-            print(f"Error processing batch: {e}")
-            raise
+    )
+    # DB_CURSOR.fetchone()
 
-
-# Example usage
-def main():
-    dotenv.load_dotenv()
-    # Database configuration
-    db_config = {
-        'host': str(os.getenv('HOST')),
-        'database': str(os.getenv('POSTGRES_DATABASE')),
-        'user': str(os.getenv('POSTGRES_USER')),
-        'password': str(os.getenv('POSTGRES_PASSWORD')),
-        'port': int(os.getenv('PORT'))
-    }
-    
-    # Example data - replace this with your actual DataFrame
-    # sample_data = {
-    #     'topic_name': ['service', 'food', 'ambiance'],
-    #     'topic_mood': ['positive', 'neutral', 'negative'],
-    #     'review_title': ['Great service!', 'Okay food', 'Bad ambiance'],
-    #     'review_text': ['Great service!', 'Okay food', 'Bad ambiance'],
-    #     'review_date': ['2024-01-15', '2024-01-16', '2024-01-17'],
-    #     'rating': [5, 3, 1],
-    #     'source': ['Google', 'Yelp', 'TripAdvisor'],
-    #     'city': ['New York', 'Los Angeles', 'Chicago']
-    # }
-    
-    # df = pl.DataFrame(sample_data)
-    df = pl.read_csv('./data/example_csv_res.csv')
-    df = df.with_columns(pl.lit('banki.ru').alias('source'))
-    df1 = df.group_by(["id", "topic_name"]).agg([
-        pl.col('topic_mood').mean(),
-    ])# Create uploader instance
-    df2 = df[:, ["id", "review_text","review_title","raiting","review_date", "source"]].unique(maintain_order=True).join(df1, on='id', how="left").with_columns(
+DF = pl.read_csv('./data/example_csv_res.csv')
+if 'source' not in DF.columns:
+    DF = DF.with_columns(pl.lit('banki.ru').alias('source'))
+DF = DF[:, ["id", "review_text","review_title","raiting","review_date", "source"]].unique(maintain_order=True).join(DF, on='id', how="left").with_columns(
         pl.col("topic_mood").map_elements(
-            lambda a: (
-                    "позитивный" if  4 <= a else 
-                    "негативный" if a <= 2.5 else 
-                    "нейтральный"
+            lambda a: 
+                    a if type(a) is str else ( 
+                    "положительно" if  4 <= a else 
+                    "отрицательно" if a <= 2.5 else 
+                    "нейтрально"
                 ),
             return_dtype=pl.String
-        ),
-        pl.lit('г. Москва').alias('city_name')
+        )
     )
-    uploader = ReviewDataUploader(db_config)
-    print(df2)
-    c = df2.null_count()
-    print(c)
-    try:
-        uploader.connect()
-        uploader.upload_data(df2, batch_size=500)
-    except Exception as e:
-        print(f"Error during upload: {e}")
-    finally:
-        uploader.disconnect()
+if 'city_name' not in DF.columns:
+    DF = DF.with_columns(pl.lit('г. Москва').alias('city_name'))
+print(DF)
+DF = DF.with_columns(pl.col('id') - DF['id'].min())
+
+def fill_cities():
+    db = DF[:, ['city_name']].unique().to_dicts()
+    rows = list(map(lambda a: (a['city_name'],), db))
+    script = """
+        INSERT INTO cities (city_name) VALUES (%s) ON CONFLICT DO NOTHING
+    """
+    execute_batch(
+        DB_CURSOR, 
+        script, 
+        rows
+    )
 
 
-if __name__ == "__main__":
-    main()
+def fill_sources():
+    db = DF[:, ['source']].unique().to_dicts()
+    rows = list(map(lambda a: (a['source'],), db))
+    script = """
+        INSERT INTO sources (source_name) VALUES (%s) ON CONFLICT DO NOTHING
+    """
+    execute_batch(
+        DB_CURSOR, 
+        script, 
+        rows
+    )
+
+
+def fill_topics():
+    db = DF[:, ['topic_name']].unique().to_dicts()
+    rows = list(map(lambda a: (a['topic_name'],), db))
+    script = """
+        INSERT INTO topics (topic_name) VALUES (%s) ON CONFLICT DO NOTHING
+    """
+    execute_batch(
+        DB_CURSOR, 
+        script, 
+        rows
+    )
+
+
+def fill_reviews():
+    script = """
+        INSERT INTO reviews (review_id, review_title, review_text, rating, review_date, city_id, source_id) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING
+    """
+    db = DF[:, ['id', 'review_text', "raiting", "review_date", "city_name", "review_title", "source"]].unique()
+    DB_CURSOR.execute("SELECT city_name, city_id FROM cities")
+    cities = dict(DB_CURSOR.fetchall())
+    DB_CURSOR.execute("SELECT source_name, source_id FROM sources")
+    sources = dict(DB_CURSOR.fetchall())
+    db = db.with_columns(
+        pl.col('city_name').replace(cities).alias("city_id"),
+        pl.col('source').replace(sources).alias("source_id")
+    ).to_dicts()
+    rows = list(map(
+        lambda a: (
+            a['id'],
+            a['review_title'],
+            a['review_text'],
+            a['raiting'],
+            a['review_date'],
+            a['city_id'],
+            a['source_id'],
+        ), db))
+    execute_batch(
+        DB_CURSOR, 
+        script, 
+        rows
+    )
+    return DF.with_columns(
+        pl.col('city_name').replace(cities).alias("city_id"),
+        pl.col('source').replace(sources).alias("source_id")
+    )
+
+
+def fill_reviews_topics():
+    script = """
+        INSERT INTO review_topics (review_id, topic_id, topic_mood) 
+        VALUES (%s, %s, %s) ON CONFLICT DO NOTHING
+    """
+    db = DF[:, ['id', 'review_text', "raiting", "topic_mood", "review_date", "city_id", "review_title", "topic_name", "source_id"]].unique()
+    DB_CURSOR.execute("SELECT topic_name, topic_id FROM topics")
+    topics = dict(DB_CURSOR.fetchall())
+    db = db.with_columns(
+        pl.col('topic_name').replace(topics).alias("topic_id"),
+    ).to_dicts()
+    rows = list(map(
+        lambda a: (
+            a['id'],
+            a['topic_id'],
+            a['topic_mood']
+        ), db))
+    execute_batch(
+        DB_CURSOR, 
+        script, 
+        rows
+    )
+
+fill_cities()
+fill_sources()
+fill_topics()
+DF = fill_reviews()
+fill_reviews_topics()
+DB_CONNECTION.commit()

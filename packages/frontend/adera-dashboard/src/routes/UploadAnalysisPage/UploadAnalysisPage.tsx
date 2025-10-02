@@ -1,17 +1,18 @@
+import { useState } from 'react';
 import * as stylex from '@stylexjs/stylex';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { NavLink, useParams } from 'react-router-dom';
 import { useAuthFetch } from '@adera/auth-fetch';
 import { ArrowLeftIconL, Container, Flex, Grid, headers } from '@adera/ui';
 import { colors } from '@adera/ui/tokens.stylex';
+import { ModalFilter } from 'features/ModalFilter';
+import { PageLoader } from 'features/PageLoader';
 import { Tonality } from 'features/Tonality';
 import { TopReviews } from 'features/TopReviews';
 import { ApiFileAnalysisDetail } from 'store/_types';
 import { formatDate } from 'utils/formatDate';
 import { invariant } from 'utils/invariant';
 import { CountsChart } from './_components/CountsChart';
-import { ModalFilter } from 'features/ModalFilter';
-import { useState } from 'react';
 
 export const UploadAnalysisPage = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ export const UploadAnalysisPage = () => {
   const [filters, setFilters] = useState<string>('all');
 
   const authFetch = useAuthFetch();
-  const { data: fileAnalysis } = useSuspenseQuery({
+  const { data: fileAnalysis, isFetching } = useSuspenseQuery({
     queryKey: ['file-analysis', { id, filters }],
     queryFn: () => {
       const params = new URLSearchParams();
@@ -69,15 +70,17 @@ export const UploadAnalysisPage = () => {
           />
         </Flex>
 
-        <Grid gap={20} rowGap={20}>
-          <Tonality
-            positiveCount={fileAnalysis.summary.positive}
-            neutralCount={fileAnalysis.summary.neutral}
-            negativeCount={fileAnalysis.summary.negative}
-          />
-          <TopReviews topics={fileAnalysis.topics} />
-          <CountsChart topics={topicCounts} />
-        </Grid>
+        <PageLoader showTime={600} loading={isFetching}>
+          <Grid gap={20} rowGap={20}>
+            <Tonality
+              positiveCount={fileAnalysis.summary.positive}
+              neutralCount={fileAnalysis.summary.neutral}
+              negativeCount={fileAnalysis.summary.negative}
+            />
+            <TopReviews topics={fileAnalysis.topics} />
+            <CountsChart topics={topicCounts} />
+          </Grid>
+        </PageLoader>
       </Container>
     </main>
   );
